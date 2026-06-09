@@ -148,9 +148,26 @@ class WorldCup:
     def __init__(self, groups):
         self.groups = {g.name: g for g in groups}
 
+        self.third_place_table = pd.DataFrame(
+            index= [],
+            columns=["P","W","D","L","GF","GA","GD","Pts"]
+        ).fillna(0)
+
+    def build_third_table(self):
+        self.third_place_table = pd.concat(
+            [g.table.iloc[[2]] for g in self.groups.values()]
+        )
+
+        self.third_place_table = self.third_place_table.sort_values(
+            ["Pts", "GD", "GF"],
+            ascending=False
+        )
+
     def simulate(self, model, fixtures):
         for group in self.groups.values():
             group.simulate(model, fixtures)
 
-    def get_table(self, group_name):
+        self.build_third_table()
+
+    def get_group_table(self, group_name):
         return self.groups[group_name].table
