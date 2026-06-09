@@ -43,5 +43,5 @@ model_run.simulate(poisson_model, fixtures)
 # for i in map(chr, range(ord('A'), ord('L')+1)):
 #     print(model_run.get_group_table(i))
 
-print(model_run.third_place_table)
-model_run.first_round.print_fixtures()
+#print(model_run.third_place_table)
+model_run.first_round.print_results()

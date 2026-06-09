@@ -45,13 +45,19 @@ class Match:
 
         self.home_goals = np.random.poisson(home_avg)
         self.away_goals = np.random.poisson(away_avg)
+        if self.home_goals > self.away_goals:
+            self.outcome = self.home_team
+        elif self.home_goals < self.away_goals:
+            self.outcome = self.away_team
+        else:
+            self.outcome = "Draw"
 
         return self.home_goals, self.away_goals
     
     def simulate_shootout(self):
-        winner = np.random.choice([self.home_team, self.away_team])
-
-        return winner
+        self.outcome = np.random.choice([self.home_team, self.away_team])
+        
+        
 
 class Group:
     """A class to store group matches and results"""
@@ -164,11 +170,30 @@ class KnockoutRound:
 
     def build_round(self):
         if self.stage == 32:
-            self.matches = knockout.build_first_knockout(self.groups, self.third_place_qualifiers, self.combination)
-        
+            self.matches = knockout.build_first_knockout(self.groups, self.combination)
+
+    def simulate(self, model):
+        for match in self.matches:
+            match.simulate_result(model)
+            if match.home_goals == match.away_goals:
+                match.simulate_shootout()
+
     def print_fixtures(self):
         for match in self.matches:
             print(match.home_team + " vs " + match.away_team)
+
+    def print_results(self):
+        for match in self.matches:
+            if match.home_goals == match.away_goals:
+                if match.outcome == match.home_team:
+                    print(match.home_team + " p" + str(match.home_goals) +
+                  "-" + str(match.away_goals) + " "  + match.away_team)
+                elif match.outcome == match.away_team:
+                    print(match.home_team + " " + str(match.home_goals) +
+                  "-" + str(match.away_goals) + "p "  + match.away_team)
+            else:
+                print(match.home_team + " " + str(match.home_goals) +
+                  "-" + str(match.away_goals) + " "  + match.away_team)
 
 class WorldCup:
     """A class to manage a whole world cup tournament simulation"""
@@ -183,6 +208,7 @@ class WorldCup:
 
 
     def build_third_table(self):
+        
         self.third_place_table = pd.concat(
             [g.table.iloc[[2]] for g in self.groups.values()]
         )
@@ -192,6 +218,8 @@ class WorldCup:
             ascending=False
         )
 
+        self.third_place_qualifiers = self.third_place_table.index[0:8].tolist()
+
     def get_group(self, team_name):
         for group in self.groups.values():
             if team_name in group.teams:
@@ -199,8 +227,7 @@ class WorldCup:
 
         return None
 
-    def get_third_place_qualifiers(self):
-        self.third_place_qualifiers = self.third_place_table.index[0:8].tolist()
+    def get_first_round_combination(self):
         self.combination = ""
         for team in self.third_place_qualifiers:
             self.combination = self.combination + self.get_group(team)
@@ -212,10 +239,11 @@ class WorldCup:
             group.simulate(model, fixtures)
 
         self.build_third_table()
-        self.get_third_place_qualifiers()
+        self.get_first_round_combination()
 
         self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination)
-        self.first_round.build_round()        
+        self.first_round.build_round()      
+        self.first_round.simulate(model)  
 
     def get_group_table(self, group_name):
         return self.groups[group_name].table

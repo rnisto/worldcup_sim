@@ -1,11 +1,10 @@
 import pandas as pd
 
-def build_first_knockout(groups, third_place_qualifiers, combination):
+def build_first_knockout(groups, combination):
     import classes
     from combinations import combinations
 
     combinations = combinations[combinations["third_place"] == combination]
-    print(combination)
     matches = [
         classes.Match(home_team=groups["A"].table.index[1], 
                       away_team=groups["B"].table.index[0]),
