@@ -3,6 +3,7 @@ import statsmodels.formula.api as smf
 import pandas as pd
 from scipy.stats import poisson
 import numpy as np
+import knockout
 
 class Team:
     """An object to store information on international teams"""
@@ -141,7 +142,32 @@ class Group:
         for match in self.matches:
             print(match.home_team + " " + str(match.home_goals) +
                   "-" + str(match.away_goals) + " "  + match.away_team)
-            
+
+class KnockoutRound:
+    """A class to manage knockout rounds""" 
+
+    def __init__(self, stage, groups, third_place_table):
+        self.stage = stage
+        self.groups = groups
+        self.third_place_table = third_place_table
+        self.matches = []
+
+    def add_match(self, home, away):
+        self.matches.append(
+            Match(
+                home_team=home,
+                away_team=away,
+            )
+        )
+
+    def build_round(self):
+        if self.stage == 32:
+            self.matches = knockout.build_first_knockout(self.groups, self.third_place_table)
+        
+    def print_fixtures(self):
+        for match in self.matches:
+            print(match.home_team + " vs " + match.away_team)
+
 class WorldCup:
     """A class to manage a whole world cup tournament simulation"""
 
@@ -152,6 +178,8 @@ class WorldCup:
             index= [],
             columns=["P","W","D","L","GF","GA","GD","Pts"]
         ).fillna(0)
+
+        
 
     def build_third_table(self):
         self.third_place_table = pd.concat(
@@ -168,6 +196,9 @@ class WorldCup:
             group.simulate(model, fixtures)
 
         self.build_third_table()
+
+        self.first_round = KnockoutRound(32, self.groups, self.third_place_table)
+        self.first_round.build_round()        
 
     def get_group_table(self, group_name):
         return self.groups[group_name].table
