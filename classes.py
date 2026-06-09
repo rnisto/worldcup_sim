@@ -146,10 +146,12 @@ class Group:
 class KnockoutRound:
     """A class to manage knockout rounds""" 
 
-    def __init__(self, stage, groups, third_place_table):
+    def __init__(self, stage, groups, third_place_qualifiers, combination):
         self.stage = stage
         self.groups = groups
-        self.third_place_table = third_place_table
+        self.third_place_qualifiers = third_place_qualifiers
+        self.combination = combination
+
         self.matches = []
 
     def add_match(self, home, away):
@@ -162,7 +164,7 @@ class KnockoutRound:
 
     def build_round(self):
         if self.stage == 32:
-            self.matches = knockout.build_first_knockout(self.groups, self.third_place_table)
+            self.matches = knockout.build_first_knockout(self.groups, self.third_place_qualifiers, self.combination)
         
     def print_fixtures(self):
         for match in self.matches:
@@ -179,7 +181,6 @@ class WorldCup:
             columns=["P","W","D","L","GF","GA","GD","Pts"]
         ).fillna(0)
 
-        
 
     def build_third_table(self):
         self.third_place_table = pd.concat(
@@ -191,13 +192,29 @@ class WorldCup:
             ascending=False
         )
 
+    def get_group(self, team_name):
+        for group in self.groups.values():
+            if team_name in group.teams:
+                return group.name
+
+        return None
+
+    def get_third_place_qualifiers(self):
+        self.third_place_qualifiers = self.third_place_table.index[0:8].tolist()
+        self.combination = ""
+        for team in self.third_place_qualifiers:
+            self.combination = self.combination + self.get_group(team)
+
+        self.combination = "".join(sorted(self.combination))
+
     def simulate(self, model, fixtures):
         for group in self.groups.values():
             group.simulate(model, fixtures)
 
         self.build_third_table()
+        self.get_third_place_qualifiers()
 
-        self.first_round = KnockoutRound(32, self.groups, self.third_place_table)
+        self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination)
         self.first_round.build_round()        
 
     def get_group_table(self, group_name):

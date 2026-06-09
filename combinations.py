@@ -7,7 +7,7 @@ combinations.columns = ['Index', '1', '2', '3', '4',
        '1B', '1D', '1E', '1G', '1I', '1K', '1L']
 
 combinations['third_place'] = combinations[combinations.columns[1:13]].apply(
-    lambda x: ''.join(x.dropna().astype(str)),
+    lambda x: ''.join(sorted(x.dropna().astype(str))),
     axis=1
 )
 
