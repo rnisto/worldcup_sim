@@ -152,9 +152,9 @@ class Group:
 class KnockoutRound:
     """A class to manage knockout rounds""" 
 
-    def __init__(self, stage, groups, third_place_qualifiers, combination):
+    def __init__(self, stage, previous_round = None, third_place_qualifiers = None, combination = None):
         self.stage = stage
-        self.groups = groups
+        self.previous_round = previous_round
         self.third_place_qualifiers = third_place_qualifiers
         self.combination = combination
 
@@ -170,7 +170,15 @@ class KnockoutRound:
 
     def build_round(self):
         if self.stage == 32:
-            self.matches = knockout.build_first_knockout(self.groups, self.combination)
+            self.matches = knockout.build_first_knockout(self.previous_round, self.combination)
+        elif self.stage == 16:
+            self.matches = knockout.build_second_knockout(self.previous_round)
+        elif self.stage == 8:
+            self.matches = knockout.build_quarters(self.previous_round)
+        elif self.stage == 4:
+            self.matches = knockout.build_semis(self.previous_round)
+        elif self.stage == 2:
+            self.matches = knockout.build_final(self.previous_round)
 
     def simulate(self, model):
         for match in self.matches:
@@ -191,6 +199,7 @@ class KnockoutRound:
                 elif match.outcome == match.away_team:
                     print(match.home_team + " " + str(match.home_goals) +
                   "-" + str(match.away_goals) + "p "  + match.away_team)
+                else: print(match.outcome)
             else:
                 print(match.home_team + " " + str(match.home_goals) +
                   "-" + str(match.away_goals) + " "  + match.away_team)
@@ -244,6 +253,22 @@ class WorldCup:
         self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination)
         self.first_round.build_round()      
         self.first_round.simulate(model)  
+
+        self.second_round = KnockoutRound(16, self.first_round)
+        self.second_round.build_round()
+        self.second_round.simulate(model)  
+
+        self.quarters = KnockoutRound(8, self.second_round)
+        self.quarters.build_round()
+        self.quarters.simulate(model)  
+
+        self.semis = KnockoutRound(4, self.quarters)
+        self.semis.build_round()
+        self.semis.simulate(model)  
+
+        self.final = KnockoutRound(2, self.semis)
+        self.final.build_round()
+        self.final.simulate(model)  
 
     def get_group_table(self, group_name):
         return self.groups[group_name].table

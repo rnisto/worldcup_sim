@@ -40,3 +40,65 @@ def build_first_knockout(groups, combination):
                       away_team=groups[combinations["1K"].values[0]].table.index[2]),
     ]
     return matches
+
+def build_second_knockout(first_round):
+    import classes
+
+    matches = [
+        classes.Match(home_team=first_round.matches[0].outcome, 
+                      away_team=first_round.matches[2].outcome),
+        classes.Match(home_team=first_round.matches[1].outcome, 
+                      away_team=first_round.matches[4].outcome),
+        classes.Match(home_team=first_round.matches[3].outcome, 
+                      away_team=first_round.matches[5].outcome),                     
+        classes.Match(home_team=first_round.matches[6].outcome, 
+                      away_team=first_round.matches[7].outcome),                     
+        classes.Match(home_team=first_round.matches[10].outcome, 
+                      away_team=first_round.matches[11].outcome),                      
+        classes.Match(home_team=first_round.matches[8].outcome, 
+                      away_team=first_round.matches[9].outcome),                     
+        classes.Match(home_team=first_round.matches[13].outcome, 
+                      away_team=first_round.matches[15].outcome),
+        classes.Match(home_team=first_round.matches[12].outcome, 
+                      away_team=first_round.matches[14].outcome)                     
+    ]
+
+    return matches
+
+def build_quarters(second_round):
+    import classes
+
+    matches = [
+        classes.Match(home_team=second_round.matches[0].outcome, 
+                      away_team=second_round.matches[1].outcome),
+        classes.Match(home_team=second_round.matches[4].outcome, 
+                      away_team=second_round.matches[5].outcome),                   
+        classes.Match(home_team=second_round.matches[2].outcome, 
+                      away_team=second_round.matches[3].outcome),                      
+        classes.Match(home_team=second_round.matches[6].outcome, 
+                      away_team=second_round.matches[7].outcome)                     
+    ]
+
+    return matches
+
+def build_semis(quarters):
+    import classes
+
+    matches = [
+        classes.Match(home_team=quarters.matches[0].outcome, 
+                      away_team=quarters.matches[1].outcome),
+        classes.Match(home_team=quarters.matches[2].outcome, 
+                      away_team=quarters.matches[3].outcome)                  
+                   
+    ]
+    return matches
+
+def build_final(semis):
+    import classes
+
+    matches = [
+        classes.Match(home_team=semis.matches[0].outcome, 
+                      away_team=semis.matches[1].outcome)                      
+    ]
+
+    return matches
