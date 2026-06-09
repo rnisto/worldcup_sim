@@ -1,4 +1,8 @@
+import pandas as pd
+import combinations
+
 def build_first_knockout(groups, third_place_table):
+
     import classes
     matches = [
         classes.Match(home_team=groups["A"].table.index[1], 
