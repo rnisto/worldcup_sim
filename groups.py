@@ -1,97 +1,17 @@
-import classes
+def create_groups():
+    import classes
 
-groupA = classes.Group(name = "A", 
-                       teams = [
-                                "Mexico", 
-                                "South Africa", 
-                                "South Korea", 
-                                "Czech Republic"
-                                ])
-
-groupB = classes.Group(name = "B", 
-                       teams = [
-                                "Canada", 
-                                "Bosnia and Herzogovina", 
-                                "Qatar", 
-                                "Switzerland"
-                                ])
-
-groupC = classes.Group(name = "C", 
-                       teams = [
-                                "Brazil", 
-                                "Morocco", 
-                                "Haiti", 
-                                "Scotland"
-                                ])
-
-groupD = classes.Group(name = "D", 
-                       teams = [
-                                "United States", 
-                                "Paraguay", 
-                                "Australia", 
-                                "Turkey"
-                                ])
-
-groupE = classes.Group(name = "E", 
-                       teams = [
-                                "Germany", 
-                                "Curacao", 
-                                "Ivory Coast", 
-                                "Ecuador"
-                                ])
-
-groupF = classes.Group(name = "F", 
-                       teams = [
-                                "Netherlands", 
-                                "Japan", 
-                                "Sweden", 
-                                "Tunisia"
-                                ])
-
-groupG = classes.Group(name = "G", 
-                       teams = [
-                                "Belgium", 
-                                "Egypt", 
-                                "Iran", 
-                                "New Zealand"
-                                ])
-
-groupH = classes.Group(name = "H", 
-                       teams = [
-                                "Spain", 
-                                "Cape Verde", 
-                                "Saudi Arabia", 
-                                "Uruguay"
-                                ])
-
-groupI = classes.Group(name = "I", 
-                       teams = [
-                                "France", 
-                                "Senegal", 
-                                "Iraq", 
-                                "Norway"
-                                ])
-
-groupJ = classes.Group(name = "J", 
-                       teams = [
-                                "Argentina", 
-                                "Algeria", 
-                                "Austria", 
-                                "Jordan"
-                                ])
-
-groupK = classes.Group(name = "K", 
-                       teams = [
-                                "Portugal", 
-                                "DR Congo", 
-                                "Uzbekistan", 
-                                "Colombia"
-                                ])
-
-groupL = classes.Group(name = "L", 
-                       teams = [
-                                "England", 
-                                "Croatia", 
-                                "Ghana", 
-                                "Panama"
-                                ])
+    return [
+        classes.Group("A", ["Mexico", "South Africa", "South Korea", "Czech Republic"]),
+        classes.Group("B", ["Canada", "Bosnia and Herzegovina", "Qatar", "Switzerland"]),
+        classes.Group("C", ["Brazil", "Morocco", "Haiti", "Scotland"]),
+        classes.Group("D", ["United States", "Paraguay", "Australia", "Turkey"]),
+        classes.Group("E", ["Germany", "Curaçao", "Ivory Coast", "Ecuador"]),
+        classes.Group("F", ["Netherlands", "Japan", "Sweden", "Tunisia"]),
+        classes.Group("G", ["Belgium", "Egypt", "Iran", "New Zealand"]),
+        classes.Group("H", ["Spain", "Cape Verde", "Saudi Arabia", "Uruguay"]),
+        classes.Group("I", ["France", "Senegal", "Iraq", "Norway"]),
+        classes.Group("J", ["Argentina", "Algeria", "Austria", "Jordan"]),
+        classes.Group("K", ["Portugal", "DR Congo", "Uzbekistan", "Colombia"]),
+        classes.Group("L", ["England", "Croatia", "Ghana", "Panama"])
+    ]

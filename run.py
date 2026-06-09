@@ -36,14 +36,10 @@ poisson_model.summary()
 fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
                 (raw["date"] > datetime.datetime(2026, 6, 10))
                 ]
-groupA = classes.Group(name = "A", teams = [
-                                            "Mexico", 
-                                            "South Africa", 
-                                            "South Korea", 
-                                            "Czech Republic"
-                                            ])
 
-groupA.import_fixtures(fixtures)
-groupA.simulate(poisson_model)
-print(groupA.table)
-groupA.print_results()
+model_run = classes.WorldCup(groups = groups.create_groups())
+model_run.simulate(poisson_model, fixtures)
+
+for i in map(chr, range(ord('A'), ord('L')+1)):
+    print(model_run.get_table(i))
+

@@ -115,7 +115,8 @@ class Group:
             self.table.loc[home, "Pts"] += 1
             self.table.loc[away, "Pts"] += 1
 
-    def simulate(self, model):
+    def simulate(self, model, fixtures):
+        self.import_fixtures(fixtures)
         for match in self.matches:
             hg, ag = match.simulate_result(model)
             self.update_table(
@@ -140,3 +141,16 @@ class Group:
         for match in self.matches:
             print(match.home_team + " " + str(match.home_goals) +
                   "-" + str(match.away_goals) + " "  + match.away_team)
+            
+class WorldCup:
+    """A class to manage a whole world cup tournament simulation"""
+
+    def __init__(self, groups):
+        self.groups = {g.name: g for g in groups}
+
+    def simulate(self, model, fixtures):
+        for group in self.groups.values():
+            group.simulate(model, fixtures)
+
+    def get_table(self, group_name):
+        return self.groups[group_name].table
