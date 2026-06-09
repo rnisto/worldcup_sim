@@ -6,8 +6,9 @@ import statsmodels.formula.api as smf
 from scipy.stats import poisson
 import classes
 
-data = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
-data["date"] = pd.to_datetime(data["date"], format='%Y-%m-%d')
+raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
+data = raw
+data["date"] = pd.to_datetime(raw["date"], format='%Y-%m-%d')
 
 data["days_since"] = (datetime.datetime.today() - data["date"]).dt.days
 data["time_weight"] = np.exp(data["days_since"] * -0.0018)
@@ -30,3 +31,19 @@ poisson_model = smf.glm(formula="goals ~ home + team + opponent", data=goal_mode
                         family=sm.families.Poisson()).fit()
 
 poisson_model.summary()
+
+
+fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
+                (raw["date"] > datetime.datetime(2026, 6, 10))
+                ]
+groupA = classes.Group(name = "A", teams = [
+                                            "Mexico", 
+                                            "South Africa", 
+                                            "South Korea", 
+                                            "Czech Republic"
+                                            ])
+
+groupA.import_fixtures(fixtures)
+groupA.simulate(poisson_model)
+print(groupA.table)
+groupA.print_results()
