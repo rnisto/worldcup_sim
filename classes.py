@@ -14,9 +14,10 @@ class Team:
 
 class Match:
     """An object to store information about games"""
-    def __init__(self, home_team, away_team):
+    def __init__(self, home_team, away_team, round = None):
         self.home_team = home_team
         self.away_team = away_team
+        self.round = round
 
         self.home_goals = "NA"
         self.away_goals = "NA"
@@ -77,6 +78,7 @@ class Group:
             Match(
                 home_team=home,
                 away_team=away,
+                round = "Group Stage"
             )
         )
 
@@ -164,7 +166,7 @@ class KnockoutRound:
         self.matches.append(
             Match(
                 home_team=home,
-                away_team=away,
+                away_team=away
             )
         )
 
@@ -270,5 +272,41 @@ class WorldCup:
         self.final.build_round()
         self.final.simulate(model)  
 
+        return self.summarise()
+
     def get_group_table(self, group_name):
         return self.groups[group_name].table
+    
+    def all_matches(self):
+        return (
+            self.first_round.matches
+            + self.second_round.matches
+            + self.quarters.matches
+            + self.semis.matches
+            + self.final.matches
+        )
+
+    def summarise(self):
+
+        winner = self.final.matches[0].outcome
+
+        finalists = (
+            self.final.matches[0].home_team,
+            self.final.matches[0].away_team
+        )
+
+        semi_finalists = []
+        for match in self.semis.matches:
+            semi_finalists.extend([match.home_team, match.away_team])
+
+        england_matches = [
+            m for m in self.all_matches()
+            if "England" in (m.home_team, m.away_team)
+        ]
+
+        return {
+            "winner": winner,
+            "finalists": finalists,
+            "semi_finalists": semi_finalists,
+            "england_matches": england_matches
+        }

@@ -39,6 +39,9 @@ def build_first_knockout(groups, combination):
         classes.Match(home_team=groups["K"].table.index[0], 
                       away_team=groups[combinations["1K"].values[0]].table.index[2]),
     ]
+    for match in matches:
+        match.round = "Round of 32"
+
     return matches
 
 def build_second_knockout(first_round):
@@ -63,6 +66,9 @@ def build_second_knockout(first_round):
                       away_team=first_round.matches[14].outcome)                     
     ]
 
+    for match in matches:
+        match.round = "Round of 16"
+    
     return matches
 
 def build_quarters(second_round):
@@ -79,6 +85,9 @@ def build_quarters(second_round):
                       away_team=second_round.matches[7].outcome)                     
     ]
 
+    for match in matches:
+        match.round = "Quarter Finals"
+
     return matches
 
 def build_semis(quarters):
@@ -91,6 +100,10 @@ def build_semis(quarters):
                       away_team=quarters.matches[3].outcome)                  
                    
     ]
+
+    for match in matches:
+        match.round = "Semi Finals"
+
     return matches
 
 def build_final(semis):
@@ -98,7 +111,8 @@ def build_final(semis):
 
     matches = [
         classes.Match(home_team=semis.matches[0].outcome, 
-                      away_team=semis.matches[1].outcome)                      
+                      away_team=semis.matches[1].outcome,
+                      round = "Final")                      
     ]
 
     return matches
