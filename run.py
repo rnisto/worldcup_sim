@@ -5,6 +5,7 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from scipy.stats import poisson
 import classes
+import groups
 
 raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
 data = raw
@@ -31,7 +32,6 @@ poisson_model = smf.glm(formula="goals ~ home + team + opponent", data=goal_mode
                         family=sm.families.Poisson()).fit()
 
 poisson_model.summary()
-
 
 fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
                 (raw["date"] > datetime.datetime(2026, 6, 10))
