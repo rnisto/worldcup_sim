@@ -188,6 +188,8 @@ class KnockoutRound:
             if match.home_goals == match.away_goals:
                 match.simulate_shootout()
 
+        self.save_teams()
+
     def print_fixtures(self):
         for match in self.matches:
             print(match.home_team + " vs " + match.away_team)
@@ -205,6 +207,11 @@ class KnockoutRound:
             else:
                 print(match.home_team + " " + str(match.home_goals) +
                   "-" + str(match.away_goals) + " "  + match.away_team)
+                
+    def save_teams(self):
+        self.teams = []
+        for match in self.matches:
+            self.teams.extend([match.home_team, match.away_team])
 
 class WorldCup:
     """A class to manage a whole world cup tournament simulation"""
@@ -254,7 +261,7 @@ class WorldCup:
 
         self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination)
         self.first_round.build_round()      
-        self.first_round.simulate(model)  
+        self.first_round.simulate(model)
 
         self.second_round = KnockoutRound(16, self.first_round)
         self.second_round.build_round()
@@ -287,26 +294,17 @@ class WorldCup:
         )
 
     def summarise(self):
-
-        winner = self.final.matches[0].outcome
-
-        finalists = (
-            self.final.matches[0].home_team,
-            self.final.matches[0].away_team
-        )
-
-        semi_finalists = []
-        for match in self.semis.matches:
-            semi_finalists.extend([match.home_team, match.away_team])
-
         england_matches = [
             m for m in self.all_matches()
             if "England" in (m.home_team, m.away_team)
         ]
 
         return {
-            "winner": winner,
-            "finalists": finalists,
-            "semi_finalists": semi_finalists,
+            "winner": self.final.matches[0].outcome,
+            "finalists": self.final.teams,
+            "semi_finalists": self.semis.teams,
+            "quarter_finalists": self.quarters.teams,
+            "second_round_teams": self.second_round.teams,
+            "first_round_teams": self.first_round.teams,
             "england_matches": england_matches
         }

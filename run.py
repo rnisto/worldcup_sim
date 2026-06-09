@@ -37,13 +37,15 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
                 (raw["date"] > datetime.datetime(2026, 6, 10))
                 ]
 
-model_run = classes.WorldCup(groups = groups.create_groups())
-model_run.simulate(poisson_model, fixtures)
 
-for i in map(chr, range(ord('A'), ord('L')+1)):
-     print(model_run.get_group_table(i))
+n_runs = 50
+outputs = []
+for i in range(n_runs):
+    model_run = classes.WorldCup(groups = groups.create_groups())
+    outputs.append(model_run.simulate(poisson_model, fixtures))
 
-print(model_run.third_place_table)
-model_run.quarters.print_results()
-model_run.semis.print_results()
-model_run.final.print_results()
+outputs = pd.DataFrame(outputs)
+print(outputs["winner"].value_counts())
+print(outputs["finalist"].value_counts()) 
+print(outputs["semi_finalists"].value_counts()) 
+print(outputs["quarter_finalist"].value_counts()) 
