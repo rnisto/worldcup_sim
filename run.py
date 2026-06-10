@@ -46,7 +46,7 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
     ["home_team", "away_team"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
-n_runs = 100
+n_runs = 10000
 fixtures_list = []
 winners_list = []
 total_time = 0
@@ -56,7 +56,7 @@ time_start = time.perf_counter()
 for i in range(n_runs):
     fixtures, winner = wc.simulate(predicted_goals_dict)
     wc.reset()
-    fixtures["model run"] = i
+    fixtures["model_run"] = i
     winners_list.append(winner)
     fixtures_list.append(fixtures)
     time_end = time.perf_counter()

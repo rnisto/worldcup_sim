@@ -1,15 +1,32 @@
 import pandas as pd
 
-outputs = pd.read_parquet('world_cup_simulations.parquet')
+winners = pd.read_parquet('simulation_winners.parquet')
+probabilities = winners["team"].value_counts().reset_index()
+probabilities.columns = ["team", "count"]
+probabilities["p"] = probabilities["count"] / sum(probabilities["count"])
+print(probabilities)
 
-probabilities = outputs.groupby(["team", "result"]).size().reset_index(name="count")
-probabilities["p"] = probabilities["count"] / 10000
 
-print(probabilities[probabilities["team"] == "England"])
-print(probabilities[probabilities["result"] == "Winner"].sort_values(["p"], ascending=False))
+fixtures = pd.read_parquet('simulation_fixtures.parquet')
+test = fixtures.melt(id_vars=["team","model_run"], 
+                     value_vars=["R32", "R16", "QF", "SF", "Final"],
+                     var_name="round",
+                     value_name="opponent"
+                     )
 
-knocked_out = outputs.groupby(["team", "result", "knocked_out_by"]).size().reset_index(name="count")
-knocked_out["p"] = knocked_out["count"] / 10000
+for round in ["R32", "R16", "QF", "SF", "Final"]:
+    opponents = test[
+    (test["team"] == "England") &
+    (test["round"] == round)
+    ]
 
-print(knocked_out[(knocked_out["team"] == "England") &
-                   (knocked_out["result"] == "R16")].sort_values(["p"], ascending= False))
+    result = opponents["opponent"].value_counts(normalize=True).reset_index()
+    result.columns = ["opponent", "probability"]
+
+    print(result.head(5))
+
+# knocked_out = outputs.groupby(["team", "result", "knocked_out_by"]).size().reset_index(name="count")
+# knocked_out["p"] = knocked_out["count"] / 10000
+
+# print(knocked_out[(knocked_out["team"] == "England") &
+#                    (knocked_out["result"] == "R16")].sort_values(["p"], ascending= False))
