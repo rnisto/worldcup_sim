@@ -42,14 +42,12 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
 teams = functions.get_teams(fixtures)
 predicted_goals_lookup = functions.build_predicted_goals_lookup(teams, poisson_model)
 
-n_runs = 1
+n_runs = 5
 outputs = []
 for i in range(n_runs):
     wc = classes.WorldCup(groups = groups.create_groups())
-    outputs.append(wc.simulate(predicted_goals_lookup, fixtures)) 
+    summary = wc.simulate(predicted_goals_lookup, fixtures)
+    summary["model run"] = i
+    outputs.append(summary) 
 
-outputs = pd.DataFrame(outputs)
-print(outputs["winner"].value_counts())
-print(outputs["finalists"].value_counts()) 
-print(outputs["semi_finalists"].value_counts()) 
-print(outputs["quarter_finalists"].value_counts()) 
+print(outputs)

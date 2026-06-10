@@ -32,7 +32,6 @@ class Match:
 
     def simulate_result(self, goals_lookup):
         home_avg, away_avg = self.predicted_goals(goals_lookup)
-        print(home_avg)
         self.home_goals = np.random.poisson(home_avg)
         self.away_goals = np.random.poisson(away_avg)
         if self.home_goals > self.away_goals:
@@ -283,17 +282,40 @@ class WorldCup:
         )
 
     def summarise(self):
-        england_matches = [
-            m for m in self.all_matches()
-            if "England" in (m.home_team, m.away_team)
+        # england_matches = [
+        #     m for m in self.all_matches()
+        #     if "England" in (m.home_team, m.away_team)
+        # ]
+        output = pd.DataFrame({
+            "team": self.teams,
+            "result": "Group",
+            "knocked_out_by": None
+        })
+
+        rounds = [
+            ("R32", self.first_round),
+            ("R16", self.second_round),
+            ("QF", self.quarters),
+            ("SF", self.semis),
+            ("Final", self.final),
         ]
 
-        return {
-            "winner": self.final.matches[0].outcome,
-            "finalists": self.final.teams,
-            "semi_finalists": self.semis.teams,
-            "quarter_finalists": self.quarters.teams,
-            "second_round_teams": self.second_round.teams,
-            "first_round_teams": self.first_round.teams,
-            "england_matches": england_matches
-        }
+        for stage, rnd in rounds:
+            for match in rnd.matches:
+                winner = match.outcome
+                loser = (
+                    match.away_team
+                    if winner == match.home_team
+                    else match.home_team
+                )
+                output.loc[
+                    output["team"] == loser,
+                    "knocked_out_by"
+                ] = winner
+
+                output.loc[
+                    output["team"] == loser,
+                    "result"
+                ] = stage
+
+        return output
