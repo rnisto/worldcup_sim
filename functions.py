@@ -6,8 +6,6 @@ def get_teams(fixtures):
         [fixtures["home_team"], fixtures["away_team"]]
     ).drop_duplicates().tolist()
 
-
-
 def build_predicted_goals_lookup(teams, model): 
     df = pd.DataFrame(
             permutations(teams, 2), 
@@ -46,8 +44,8 @@ def calc_remaining(time_start, time_end, n_runs, i):
 
     mins, secs = convert_to_mins(exp_time_remaining)
     return [
-        mins,
-        secs,
+        int(mins),
+        int(secs),
         pc
     ]
 

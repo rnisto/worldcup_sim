@@ -1,9 +1,5 @@
-import pandas as pd
-
-def build_first_knockout(groups, combination):
+def build_first_knockout(groups, combination, combinations):
     import classes
-    from combinations import combinations
-
     combinations = combinations[combinations["third_place"] == combination]
     matches = [
         classes.Match(home_team=groups["A"].table.index[1], 
@@ -41,7 +37,6 @@ def build_first_knockout(groups, combination):
     ]
     for match in matches:
         match.round = "Round of 32"
-
     return matches
 
 def build_second_knockout(first_round):

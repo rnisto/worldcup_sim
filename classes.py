@@ -145,11 +145,12 @@ class Group:
 class KnockoutRound:
     """A class to manage knockout rounds""" 
 
-    def __init__(self, stage, previous_round = None, third_place_qualifiers = None, combination = None):
+    def __init__(self, stage, previous_round = None, third_place_qualifiers = None, combination = None, r32_combinations = None):
         self.stage = stage
         self.previous_round = previous_round
         self.third_place_qualifiers = third_place_qualifiers
         self.combination = combination
+        self.r32_combinations = r32_combinations
 
         self.matches = []
         self.teams = []
@@ -164,7 +165,7 @@ class KnockoutRound:
 
     def build_round(self):
         if self.stage == 32:
-            self.matches = knockout.build_first_knockout(self.previous_round, self.combination)
+            self.matches = knockout.build_first_knockout(self.previous_round, self.combination, self.r32_combinations)
         elif self.stage == 16:
             self.matches = knockout.build_second_knockout(self.previous_round)
         elif self.stage == 8:
@@ -224,6 +225,9 @@ class WorldCup:
             columns=["P","W","D","L","GF","GA","GD","Pts"]
         ).fillna(0)
 
+        from combinations import combinations
+        self.r32_combinations = combinations
+
     def build_third_table(self):
         self.third_place_table = pd.concat(
             [g.table.iloc[[2]] for g in self.groups.values()]
@@ -249,7 +253,7 @@ class WorldCup:
             self.combination = self.combination + self.get_group(team)
 
         self.combination = "".join(sorted(self.combination))
-
+        
     def simulate(self, goals_lookup):
         for group in self.groups.values():
             group.simulate(goals_lookup)
@@ -257,7 +261,7 @@ class WorldCup:
         self.build_third_table()
         self.get_first_round_combination()
 
-        self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination)
+        self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination, self.r32_combinations)
         self.first_round.build_round()      
         self.first_round.simulate(goals_lookup)
 

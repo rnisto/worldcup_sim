@@ -46,7 +46,7 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
     ["home_team", "away_team"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
-n_runs = 10000
+n_runs = 1
 outputs_list = []
 total_time = 0
 
@@ -63,7 +63,7 @@ for i in range(n_runs):
     if i % 10 == 0: functions.print_time_remaining(time_start, time_end, n_runs, i)
     
 outputs = pd.concat(outputs_list, ignore_index=True)
-outputs.to_parquet("world_cup_simulations.parquet")
+#outputs.to_parquet("world_cup_simulations.parquet")
 
-outputs = pd.read_parquet('world_cup_simulations.parquet')
-print(outputs.sample(10))
+#outputs = pd.read_parquet('world_cup_simulations.parquet')
+#print(outputs.sample(10))
