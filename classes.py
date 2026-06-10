@@ -145,12 +145,11 @@ class Group:
 class KnockoutRound:
     """A class to manage knockout rounds""" 
 
-    def __init__(self, stage, previous_round = None, third_place_qualifiers = None, combination = None, r32_combinations = None):
+    def __init__(self, stage):
         self.stage = stage
-        self.previous_round = previous_round
-        self.third_place_qualifiers = third_place_qualifiers
-        self.combination = combination
-        self.r32_combinations = r32_combinations
+        self.previous_round = None
+        self.combination = None
+        self.r32_combinations = None
 
         self.matches = []
         self.teams = []
@@ -163,17 +162,17 @@ class KnockoutRound:
             )
         )
 
-    def build_round(self):
+    def build_round(self, previous_round = None, combination = None, r32_combinations = None):
         if self.stage == 32:
-            self.matches = knockout.build_first_knockout(self.previous_round, self.combination, self.r32_combinations)
+            self.matches = knockout.build_first_knockout(previous_round, combination, r32_combinations)
         elif self.stage == 16:
-            self.matches = knockout.build_second_knockout(self.previous_round)
+            self.matches = knockout.build_second_knockout(previous_round)
         elif self.stage == 8:
-            self.matches = knockout.build_quarters(self.previous_round)
+            self.matches = knockout.build_quarters(previous_round)
         elif self.stage == 4:
-            self.matches = knockout.build_semis(self.previous_round)
+            self.matches = knockout.build_semis(previous_round)
         elif self.stage == 2:
-            self.matches = knockout.build_final(self.previous_round)
+            self.matches = knockout.build_final(previous_round)
 
     def simulate(self, goals_lookup):
         for match in self.matches:
@@ -215,18 +214,12 @@ class WorldCup:
     def __init__(self, groups, fixtures):
         self.groups = {g.name: g for g in groups}
         self.teams = []
-
-        for g in self.groups.values():
-            self.teams.extend(g.teams)
-            g.import_fixtures(fixtures)
-
-        self.third_place_table = pd.DataFrame(
-            index= [],
-            columns=["P","W","D","L","GF","GA","GD","Pts"]
-        ).fillna(0)
+        self.fixtures = fixtures
 
         from combinations import combinations
         self.r32_combinations = combinations
+
+        self.build_tournament()
 
     def build_third_table(self):
         self.third_place_table = pd.concat(
@@ -253,7 +246,23 @@ class WorldCup:
             self.combination = self.combination + self.get_group(team)
 
         self.combination = "".join(sorted(self.combination))
-        
+       
+    def build_tournament(self):
+        for g in self.groups.values():
+            self.teams.extend(g.teams)
+            g.import_fixtures(self.fixtures)
+
+        self.third_place_table = pd.DataFrame(
+            index= [],
+            columns=["P","W","D","L","GF","GA","GD","Pts"]
+        ).fillna(0)
+
+        self.first_round = KnockoutRound(32)
+        self.second_round = KnockoutRound(16)
+        self.quarters = KnockoutRound(8)
+        self.semis = KnockoutRound(4)
+        self.final = KnockoutRound(2)
+
     def simulate(self, goals_lookup):
         for group in self.groups.values():
             group.simulate(goals_lookup)
@@ -261,24 +270,22 @@ class WorldCup:
         self.build_third_table()
         self.get_first_round_combination()
 
-        self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination, self.r32_combinations)
-        self.first_round.build_round()      
+        self.first_round.build_round(previous_round = self.groups,
+                                     combination = self.combination,
+                                     r32_combinations = self.r32_combinations
+                                     )      
         self.first_round.simulate(goals_lookup)
 
-        self.second_round = KnockoutRound(16, self.first_round)
-        self.second_round.build_round()
+        self.second_round.build_round(self.first_round)
         self.second_round.simulate(goals_lookup)  
 
-        self.quarters = KnockoutRound(8, self.second_round)
-        self.quarters.build_round()
+        self.quarters.build_round(self.second_round)
         self.quarters.simulate(goals_lookup)  
 
-        self.semis = KnockoutRound(4, self.quarters)
-        self.semis.build_round()
+        self.semis.build_round(self.quarters)
         self.semis.simulate(goals_lookup)  
 
-        self.final = KnockoutRound(2, self.semis)
-        self.final.build_round()
+        self.final.build_round(self.semis)
         self.final.simulate(goals_lookup)  
 
         return self.summarise()

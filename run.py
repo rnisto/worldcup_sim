@@ -46,13 +46,12 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
     ["home_team", "away_team"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
-n_runs = 1
+n_runs = 10000
 outputs_list = []
 total_time = 0
 
-time_start = time.perf_counter()
-
 wc = classes.WorldCup(groups = groups.create_groups(), fixtures = fixtures)
+time_start = time.perf_counter()
 for i in range(n_runs):
     summary = wc.simulate(predicted_goals_dict)
     wc.reset()
