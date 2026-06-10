@@ -50,7 +50,7 @@ class Group:
         self.matches = []
 
         self.table = pd.DataFrame(
-            index=teams,
+            index=self.teams,
             columns=["P","W","D","L","GF","GA","GD","Pts"]
         ).fillna(0)
 
@@ -64,11 +64,11 @@ class Group:
         )
 
     def import_fixtures(self, fixtures):
-        for team in self.teams:
-            group_fixtures = fixtures[
-                fixtures["home_team"].isin(self.teams) &
-                fixtures["away_team"].isin(self.teams)
-            ]
+
+        group_fixtures = fixtures[
+            fixtures["home_team"].isin(self.teams) &
+            fixtures["away_team"].isin(self.teams)
+        ]
 
         for _, row in group_fixtures.iterrows():
             self.add_match(
@@ -105,8 +105,7 @@ class Group:
             self.table.loc[home, "Pts"] += 1
             self.table.loc[away, "Pts"] += 1
 
-    def simulate(self, goals_lookup, fixtures):
-        self.import_fixtures(fixtures)
+    def simulate(self, goals_lookup):
         for match in self.matches:
             hg, ag = match.simulate_result(goals_lookup)
             self.update_table(
@@ -131,6 +130,17 @@ class Group:
         for match in self.matches:
             print(match.home_team + " " + str(match.home_goals) +
                   "-" + str(match.away_goals) + " "  + match.away_team)
+            
+    def reset(self):
+        for match in self.matches:
+            match.home_goals = None
+            match.away_goals = None
+            match.result = None
+
+        self.table = pd.DataFrame(
+            index=self.teams,
+            columns=["P","W","D","L","GF","GA","GD","Pts"]
+        ).fillna(0)
 
 class KnockoutRound:
     """A class to manage knockout rounds""" 
@@ -142,6 +152,7 @@ class KnockoutRound:
         self.combination = combination
 
         self.matches = []
+        self.teams = []
 
     def add_match(self, home, away):
         self.matches.append(
@@ -190,19 +201,23 @@ class KnockoutRound:
                   "-" + str(match.away_goals) + " "  + match.away_team)
                 
     def save_teams(self):
-        self.teams = []
         for match in self.matches:
             self.teams.extend([match.home_team, match.away_team])
+
+    def reset(self):
+        self.matches = []
+        self.teams = []
 
 class WorldCup:
     """A class to manage a whole world cup tournament simulation"""
 
-    def __init__(self, groups):
+    def __init__(self, groups, fixtures):
         self.groups = {g.name: g for g in groups}
-
         self.teams = []
+
         for g in self.groups.values():
             self.teams.extend(g.teams)
+            g.import_fixtures(fixtures)
 
         self.third_place_table = pd.DataFrame(
             index= [],
@@ -235,9 +250,9 @@ class WorldCup:
 
         self.combination = "".join(sorted(self.combination))
 
-    def simulate(self, goals_lookup, fixtures):
+    def simulate(self, goals_lookup):
         for group in self.groups.values():
-            group.simulate(goals_lookup, fixtures)
+            group.simulate(goals_lookup)
 
         self.build_third_table()
         self.get_first_round_combination()
@@ -313,4 +328,22 @@ class WorldCup:
                     "result"
                 ] = stage
 
+        output.loc[
+                    output["team"] == self.final.matches[0].outcome,
+                    "result"
+                ] = "Winner"
+
         return output
+    def reset(self):
+        for group in self.groups.values():
+            group.reset()
+        self.first_round.reset()
+        self.second_round.reset()
+        self.quarters.reset()
+        self.semis.reset()
+        self.final.reset()
+
+        self.third_place_table = pd.DataFrame(
+            index= [],
+            columns=["P","W","D","L","GF","GA","GD","Pts"]
+        ).fillna(0)

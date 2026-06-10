@@ -51,21 +51,17 @@ outputs_list = []
 total_time = 0
 
 time_start = time.perf_counter()
-for i in range(n_runs):
-    
 
-    wc = classes.WorldCup(groups = groups.create_groups())
-    summary = wc.simulate(predicted_goals_dict, fixtures)
+wc = classes.WorldCup(groups = groups.create_groups(), fixtures = fixtures)
+for i in range(n_runs):
+    summary = wc.simulate(predicted_goals_dict)
+    wc.reset()
     summary["model run"] = i
 
     outputs_list.append(summary)
     time_end = time.perf_counter()
-    time_elapsed = time_end - time_start
-    time_average = (time_elapsed) / (i + 1)
-    exp_total_time = time_average * n_runs
-    exp_time_remaining = exp_total_time - time_elapsed
-    print(f'Approximately {(exp_time_remaining) / 60} minutes remaining') 
-
+    if i % 10 == 0: functions.print_time_remaining(time_start, time_end, n_runs, i)
+    
 outputs = pd.concat(outputs_list, ignore_index=True)
 outputs.to_parquet("world_cup_simulations.parquet")
 
