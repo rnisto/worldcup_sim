@@ -9,19 +9,24 @@ def get_teams(fixtures):
 
 
 def build_predicted_goals_lookup(teams, model): 
-    predicted_goals_lookup = pd.DataFrame( 
-        permutations(teams, 2), 
-        columns=["home_team", "away_team"] 
-        )
-    temp_h = predicted_goals_lookup.rename(columns={
-        "home_team":"team", "away_team":"opponent", "home_goals":"goals"
-        }) 
-    temp_a = predicted_goals_lookup.rename(columns={
-            "away_team":"team", "home_team":"opponent", "away_goals":"goals"
-        })    
-    temp_h["home"] = 0
-    temp_a["home"] = 0
+    df = pd.DataFrame(
+            permutations(teams, 2), 
+            columns=["home_team", "away_team"]
+            )
+    
+    # home perspective
+    temp_home = df.copy()
+    temp_home["team"] = temp_home["home_team"]
+    temp_home["opponent"] = temp_home["away_team"]
+    temp_home["home"] = 1
 
-    predicted_goals_lookup["home_goals"] = model.predict(temp_h)
-    predicted_goals_lookup["away_goals"] = model.predict(temp_a)
-    return(predicted_goals_lookup)
+    # away perspective
+    temp_away = df.copy()
+    temp_away["team"] = temp_away["away_team"]
+    temp_away["opponent"] = temp_away["home_team"]
+    temp_away["home"] = 0
+
+    df["home_goals"] = model.predict(temp_home)
+    df["away_goals"] = model.predict(temp_away)
+    
+    return df

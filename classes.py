@@ -20,13 +20,8 @@ class Match:
         self.away_goals = "NA"
 
     def predicted_goals(self, goals_lookup):
-        row = goals_lookup[
-                (goals_lookup["home_team"] == self.home_team) &
-                (goals_lookup["away_team"] == self.away_team)
-        ].iloc[0]
-
-        home_avg = row["home_goals"]
-        away_avg = row["away_goals"]
+        home_avg = goals_lookup[(self.home_team, self.away_team)]["home_goals"]
+        away_avg = goals_lookup[(self.home_team, self.away_team)]["away_goals"]
 
         return home_avg, away_avg
 

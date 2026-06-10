@@ -42,6 +42,9 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
 
 teams = functions.get_teams(fixtures)
 predicted_goals_lookup = functions.build_predicted_goals_lookup(teams, poisson_model)
+predicted_goals_dict = predicted_goals_lookup.set_index(
+    ["home_team", "away_team"]
+)[["home_goals", "away_goals"]].to_dict("index")
 
 n_runs = 10
 outputs_list = []
@@ -52,7 +55,7 @@ for i in range(n_runs):
     
 
     wc = classes.WorldCup(groups = groups.create_groups())
-    summary = wc.simulate(predicted_goals_lookup, fixtures)
+    summary = wc.simulate(predicted_goals_dict, fixtures)
     summary["model run"] = i
 
     outputs_list.append(summary)
@@ -67,3 +70,4 @@ outputs = pd.concat(outputs_list, ignore_index=True)
 outputs.to_parquet("world_cup_simulations.parquet")
 
 outputs = pd.read_parquet('world_cup_simulations.parquet')
+print(outputs.sample(10))
