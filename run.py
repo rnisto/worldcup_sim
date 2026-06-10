@@ -6,6 +6,8 @@ import statsmodels.formula.api as smf
 from scipy.stats import poisson
 import classes
 import groups
+import functions
+from itertools import permutations
 
 raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
 data = raw
@@ -37,15 +39,17 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
                 (raw["date"] > datetime.datetime(2026, 6, 10))
                 ]
 
+teams = functions.get_teams(fixtures)
+predicted_goals_lookup = functions.build_predicted_goals_lookup(teams, poisson_model)
 
-n_runs = 50
+n_runs = 0
 outputs = []
 for i in range(n_runs):
-    model_run = classes.WorldCup(groups = groups.create_groups())
-    outputs.append(model_run.simulate(poisson_model, fixtures))
+    wc = classes.WorldCup(groups = groups.create_groups())
+    outputs.append(wc.simulate(poisson_model, fixtures)) 
 
 outputs = pd.DataFrame(outputs)
 print(outputs["winner"].value_counts())
-print(outputs["finalist"].value_counts()) 
+print(outputs["finalists"].value_counts()) 
 print(outputs["semi_finalists"].value_counts()) 
-print(outputs["quarter_finalist"].value_counts()) 
+print(outputs["quarter_finalists"].value_counts()) 

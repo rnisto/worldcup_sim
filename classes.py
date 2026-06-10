@@ -4,6 +4,7 @@ import pandas as pd
 from scipy.stats import poisson
 import numpy as np
 import knockout
+from itertools import permutations
 
 class Team:
     """An object to store information on international teams"""
@@ -57,8 +58,6 @@ class Match:
     
     def simulate_shootout(self):
         self.outcome = np.random.choice([self.home_team, self.away_team])
-        
-        
 
 class Group:
     """A class to store group matches and results"""
@@ -219,14 +218,16 @@ class WorldCup:
     def __init__(self, groups):
         self.groups = {g.name: g for g in groups}
 
+        self.teams = []
+        for g in self.groups.values():
+            self.teams.extend(g.teams)
+
         self.third_place_table = pd.DataFrame(
             index= [],
             columns=["P","W","D","L","GF","GA","GD","Pts"]
         ).fillna(0)
 
-
     def build_third_table(self):
-        
         self.third_place_table = pd.concat(
             [g.table.iloc[[2]] for g in self.groups.values()]
         )
@@ -255,6 +256,8 @@ class WorldCup:
     def simulate(self, model, fixtures):
         for group in self.groups.values():
             group.simulate(model, fixtures)
+
+        self.build_predicted_goals_lookup(model)
 
         self.build_third_table()
         self.get_first_round_combination()
