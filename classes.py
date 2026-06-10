@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import knockout
+import time
 
 class Team:
     """An object to store information on international teams"""
@@ -46,13 +47,17 @@ class Group:
     def __init__(self, name, teams):
         self.name = name
         self.teams = teams
+        self.team_to_idx = {t: i for i, t in enumerate(self.teams)}
 
         self.matches = []
 
-        self.table = pd.DataFrame(
-            index=self.teams,
-            columns=["P","W","D","L","GF","GA","GD","Pts"]
-        ).fillna(0)
+        self.pts = np.zeros(len(self.teams))
+        self.gf = np.zeros(len(self.teams))
+        self.ga = np.zeros(len(self.teams))
+        self.w = np.zeros(len(self.teams))
+        self.d = np.zeros(len(self.teams))
+        self.l = np.zeros(len(self.teams))
+        self.table = self.build_table()
 
     def add_match(self, home, away):
         self.matches.append(
@@ -77,33 +82,48 @@ class Group:
             )
 
     def update_table(self, home, away, hg, ag):
-        self.table.loc[home, "P"] += 1
-        self.table.loc[away, "P"] += 1
+        h = self.team_to_idx[home]
+        a = self.team_to_idx[away]
 
-        self.table.loc[home, "GF"] += hg
-        self.table.loc[home, "GA"] += ag
+        self.gf[h] += hg
+        self.ga[h] += ag
+        self.gf[a] += ag
+        self.ga[a] += hg
 
-        self.table.loc[away, "GF"] += ag
-        self.table.loc[away, "GA"] += hg
+        self.pts[h] += 1
+        self.pts[a] += 1
 
         if hg > ag:
-            self.table.loc[home, "W"] += 1
-            self.table.loc[away, "L"] += 1
-
-            self.table.loc[home, "Pts"] += 3
-
+            self.w[h] += 1
+            self.l[a] += 1
+            self.pts[h] += 2
         elif ag > hg:
-            self.table.loc[away, "W"] += 1
-            self.table.loc[home, "L"] += 1
-
-            self.table.loc[away, "Pts"] += 3
-
+            self.w[a] += 1
+            self.l[h] += 1
+            self.pts[a] += 2
         else:
-            self.table.loc[home, "D"] += 1
-            self.table.loc[away, "D"] += 1
+            self.d[h] += 1
+            self.d[a] += 1
+            self.pts[h] += 1
+            self.pts[a] += 1
 
-            self.table.loc[home, "Pts"] += 1
-            self.table.loc[away, "Pts"] += 1
+    def build_table(self):
+        df = pd.DataFrame({
+            "team": self.teams,
+            "Pts": self.pts,
+            "GF": self.gf,
+            "GA": self.ga,
+        })
+
+        df["GD"] = df["GF"] - df["GA"]
+
+        df = df.sort_values(
+            ["Pts", "GD", "GF"],
+            ascending=False
+        )
+        df = df.set_index("team")
+        
+        return df
 
     def simulate(self, goals_lookup):
         for match in self.matches:
@@ -115,15 +135,7 @@ class Group:
                 ag
             )
 
-        self.table["GD"] = (
-            self.table["GF"] - self.table["GA"]
-        )
-        
-        self.table = self.table.sort_values(
-            ["Pts", "GD", "GF"],
-            ascending=False
-        )
-
+        self.table = self.build_table()
         return self.table
     
     def print_results(self):
@@ -137,10 +149,13 @@ class Group:
             match.away_goals = None
             match.result = None
 
-        self.table = pd.DataFrame(
-            index=self.teams,
-            columns=["P","W","D","L","GF","GA","GD","Pts"]
-        ).fillna(0)
+        self.pts = np.zeros(len(self.teams))
+        self.gf = np.zeros(len(self.teams))
+        self.ga = np.zeros(len(self.teams))
+        self.w = np.zeros(len(self.teams))
+        self.d = np.zeros(len(self.teams))
+        self.l = np.zeros(len(self.teams))
+        self.table = self.build_table()
 
 class KnockoutRound:
     """A class to manage knockout rounds""" 
@@ -303,14 +318,8 @@ class WorldCup:
         )
 
     def summarise(self):
-        # england_matches = [
-        #     m for m in self.all_matches()
-        #     if "England" in (m.home_team, m.away_team)
-        # ]
-        output = pd.DataFrame({
-            "team": self.teams,
-            "result": "Group",
-            "knocked_out_by": None
+        fixtures = pd.DataFrame({
+            "team": self.teams
         })
 
         rounds = [
@@ -323,28 +332,20 @@ class WorldCup:
 
         for stage, rnd in rounds:
             for match in rnd.matches:
-                winner = match.outcome
-                loser = (
-                    match.away_team
-                    if winner == match.home_team
-                    else match.home_team
-                )
-                output.loc[
-                    output["team"] == loser,
-                    "knocked_out_by"
-                ] = winner
+                fixtures.loc[
+                    fixtures["team"] == match.home_team,
+                    stage                           
+                ] = match.away_team
+        
+                fixtures.loc[
+                    fixtures["team"] == match.away_team,
+                    stage                           
+                ] = match.home_team
 
-                output.loc[
-                    output["team"] == loser,
-                    "result"
-                ] = stage
 
-        output.loc[
-                    output["team"] == self.final.matches[0].outcome,
-                    "result"
-                ] = "Winner"
+                winner = self.final.matches[0].outcome
+        return [fixtures, winner]
 
-        return output
     def reset(self):
         for group in self.groups.values():
             group.reset()
