@@ -1,3 +1,6 @@
+import pandas as pd
+from itertools import permutations
+
 def get_teams(fixtures):
     return pd.concat(
         [fixtures["home_team"], fixtures["away_team"]]

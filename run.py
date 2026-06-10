@@ -7,7 +7,7 @@ from scipy.stats import poisson
 import classes
 import groups
 import functions
-from itertools import permutations
+
 
 raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
 data = raw
@@ -42,11 +42,11 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
 teams = functions.get_teams(fixtures)
 predicted_goals_lookup = functions.build_predicted_goals_lookup(teams, poisson_model)
 
-n_runs = 0
+n_runs = 1
 outputs = []
 for i in range(n_runs):
     wc = classes.WorldCup(groups = groups.create_groups())
-    outputs.append(wc.simulate(poisson_model, fixtures)) 
+    outputs.append(wc.simulate(predicted_goals_lookup, fixtures)) 
 
 outputs = pd.DataFrame(outputs)
 print(outputs["winner"].value_counts())

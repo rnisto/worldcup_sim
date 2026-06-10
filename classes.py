@@ -1,10 +1,6 @@
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
 import pandas as pd
-from scipy.stats import poisson
 import numpy as np
 import knockout
-from itertools import permutations
 
 class Team:
     """An object to store information on international teams"""
@@ -23,28 +19,20 @@ class Match:
         self.home_goals = "NA"
         self.away_goals = "NA"
 
-    def predicted_goals(self, model):
-        home_avg = model.predict(
-            pd.DataFrame({
-                "team": [self.home_team],
-                "opponent": [self.away_team],
-                "home": [0]
-            })
-        ).iloc[0]
+    def predicted_goals(self, goals_lookup):
+        row = goals_lookup[
+                (goals_lookup["home_team"] == self.home_team) &
+                (goals_lookup["away_team"] == self.away_team)
+        ].iloc[0]
 
-        away_avg = model.predict(
-            pd.DataFrame({
-                "team": [self.away_team],
-                "opponent": [self.home_team],
-                "home": [0]
-            })
-        ).iloc[0]
+        home_avg = row["home_goals"]
+        away_avg = row["away_goals"]
 
         return home_avg, away_avg
 
-    def simulate_result(self, model):
-        home_avg, away_avg = self.predicted_goals(model)
-
+    def simulate_result(self, goals_lookup):
+        home_avg, away_avg = self.predicted_goals(goals_lookup)
+        print(home_avg)
         self.home_goals = np.random.poisson(home_avg)
         self.away_goals = np.random.poisson(away_avg)
         if self.home_goals > self.away_goals:
@@ -123,10 +111,10 @@ class Group:
             self.table.loc[home, "Pts"] += 1
             self.table.loc[away, "Pts"] += 1
 
-    def simulate(self, model, fixtures):
+    def simulate(self, goals_lookup, fixtures):
         self.import_fixtures(fixtures)
         for match in self.matches:
-            hg, ag = match.simulate_result(model)
+            hg, ag = match.simulate_result(goals_lookup)
             self.update_table(
                 match.home_team,
                 match.away_team,
@@ -181,9 +169,9 @@ class KnockoutRound:
         elif self.stage == 2:
             self.matches = knockout.build_final(self.previous_round)
 
-    def simulate(self, model):
+    def simulate(self, goals_lookup):
         for match in self.matches:
-            match.simulate_result(model)
+            match.simulate_result(goals_lookup)
             if match.home_goals == match.away_goals:
                 match.simulate_shootout()
 
@@ -253,34 +241,32 @@ class WorldCup:
 
         self.combination = "".join(sorted(self.combination))
 
-    def simulate(self, model, fixtures):
+    def simulate(self, goals_lookup, fixtures):
         for group in self.groups.values():
-            group.simulate(model, fixtures)
-
-        self.build_predicted_goals_lookup(model)
+            group.simulate(goals_lookup, fixtures)
 
         self.build_third_table()
         self.get_first_round_combination()
 
         self.first_round = KnockoutRound(32, self.groups, self.third_place_table, self.combination)
         self.first_round.build_round()      
-        self.first_round.simulate(model)
+        self.first_round.simulate(goals_lookup)
 
         self.second_round = KnockoutRound(16, self.first_round)
         self.second_round.build_round()
-        self.second_round.simulate(model)  
+        self.second_round.simulate(goals_lookup)  
 
         self.quarters = KnockoutRound(8, self.second_round)
         self.quarters.build_round()
-        self.quarters.simulate(model)  
+        self.quarters.simulate(goals_lookup)  
 
         self.semis = KnockoutRound(4, self.quarters)
         self.semis.build_round()
-        self.semis.simulate(model)  
+        self.semis.simulate(goals_lookup)  
 
         self.final = KnockoutRound(2, self.semis)
         self.final.build_round()
-        self.final.simulate(model)  
+        self.final.simulate(goals_lookup)  
 
         return self.summarise()
 
