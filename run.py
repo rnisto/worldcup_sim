@@ -7,6 +7,7 @@ from scipy.stats import poisson
 import classes
 import groups
 import functions
+import time
 
 
 raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
@@ -42,12 +43,27 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
 teams = functions.get_teams(fixtures)
 predicted_goals_lookup = functions.build_predicted_goals_lookup(teams, poisson_model)
 
-n_runs = 5
-outputs = []
+n_runs = 10
+outputs_list = []
+total_time = 0
+
+time_start = time.perf_counter()
 for i in range(n_runs):
+    
+
     wc = classes.WorldCup(groups = groups.create_groups())
     summary = wc.simulate(predicted_goals_lookup, fixtures)
     summary["model run"] = i
-    outputs.append(summary) 
 
-print(outputs)
+    outputs_list.append(summary)
+    time_end = time.perf_counter()
+    time_elapsed = time_end - time_start
+    time_average = (time_elapsed) / (i + 1)
+    exp_total_time = time_average * n_runs
+    exp_time_remaining = exp_total_time - time_elapsed
+    print(f'Approximately {(exp_time_remaining) / 60} minutes remaining') 
+
+outputs = pd.concat(outputs_list, ignore_index=True)
+outputs.to_parquet("world_cup_simulations.parquet")
+
+outputs = pd.read_parquet('world_cup_simulations.parquet')
