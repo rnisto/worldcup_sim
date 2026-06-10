@@ -7,7 +7,7 @@ def build_first_knockout(groups, combination):
     combinations = combinations[combinations["third_place"] == combination]
     matches = [
         classes.Match(home_team=groups["A"].table.index[1], 
-                      away_team=groups["B"].table.index[0]),
+                      away_team=groups["B"].table.index[1]),
         classes.Match(home_team=groups["C"].table.index[0], 
                       away_team=groups["F"].table.index[1]),
         classes.Match(home_team=groups["E"].table.index[0], 

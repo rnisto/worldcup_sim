@@ -46,7 +46,7 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
     ["home_team", "away_team"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
-n_runs = 10
+n_runs = 10000
 outputs_list = []
 total_time = 0
 
