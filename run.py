@@ -18,7 +18,7 @@ fixtures = raw[(raw["tournament"] == "FIFA World Cup") &
 teams = functions.get_teams(fixtures)
 predicted_goals_lookup = functions.build_predicted_goals_lookup(teams, poisson_model)
 predicted_goals_dict = predicted_goals_lookup.set_index(
-    ["home_team", "away_team"]
+    ["home_team", "away_team", "advantage"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
 n_runs = 10000
@@ -43,5 +43,5 @@ winners = pd.DataFrame({
     "model_run": range(n_runs)
 })
 
-fixtures.to_parquet("simulation_fixtures.parquet")
-winners.to_parquet("simulation_winners.parquet")
+#fixtures.to_parquet("simulation_fixtures.parquet")
+#winners.to_parquet("simulation_winners.parquet")

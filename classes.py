@@ -12,17 +12,25 @@ class Team:
 
 class Match:
     """An object to store information about games"""
-    def __init__(self, home_team, away_team, round = None):
+    def __init__(self, home_team, away_team, location = None, round = None):
         self.home_team = home_team
         self.away_team = away_team
+        self.location = location
         self.round = round
 
-        self.home_goals = "NA"
-        self.away_goals = "NA"
+        self.home_goals = None
+        self.away_goals = None
+
+        if self.home_team == self.location:
+            self.advantage = "H"
+        elif self.away_team == self.location:
+            self.advantage = "A"
+        else:
+            self.advantage = "N"
 
     def predicted_goals(self, goals_lookup):
-        home_avg = goals_lookup[(self.home_team, self.away_team)]["home_goals"]
-        away_avg = goals_lookup[(self.home_team, self.away_team)]["away_goals"]
+        home_avg = goals_lookup[(self.home_team, self.away_team, self.advantage)]["home_goals"]
+        away_avg = goals_lookup[(self.home_team, self.away_team, self.advantage)]["away_goals"]
 
         return home_avg, away_avg
 
@@ -59,11 +67,12 @@ class Group:
         self.l = np.zeros(len(self.teams))
         self.table = self.build_table()
 
-    def add_match(self, home, away):
+    def add_match(self, home, away, location):
         self.matches.append(
             Match(
                 home_team=home,
                 away_team=away,
+                location = location,
                 round = "Group Stage"
             )
         )
@@ -78,7 +87,8 @@ class Group:
         for _, row in group_fixtures.iterrows():
             self.add_match(
                 home=row["home_team"],
-                away=row["away_team"]
+                away=row["away_team"],
+                location=row["country"]
             )
 
     def update_table(self, home, away, hg, ag):
@@ -341,7 +351,6 @@ class WorldCup:
                     fixtures["team"] == match.away_team,
                     stage                           
                 ] = match.home_team
-
 
                 winner = self.final.matches[0].outcome
         return [fixtures, winner]
