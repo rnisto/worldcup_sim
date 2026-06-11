@@ -4,10 +4,10 @@ import datetime as datetime
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
-def build_dataframe(data, rho, end_date, filter = True, friendly_weight = 0.5):
+def build_dataframe(data, rho, end_date, filter = True, friendly_weight = 1):
     data["days_since"] = (end_date - data["date"]).dt.days
     data["time_weight"] = np.exp(data["days_since"] * rho)
-    data = data[(data["days_since"] < 365*5) & (data["days_since"] > 0)]
+    data = data[(data["days_since"] < 365*10) & (data["days_since"] > 0)]
     data["comp_weight"] = np.where(
         data["tournament"] == "Friendly",
         friendly_weight,
@@ -44,8 +44,8 @@ def estimate_model(data):
 data = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
 data["date"] = pd.to_datetime(data["date"], format='%Y-%m-%d')
 
-model_data = build_dataframe(data, rho = -0.0015, 
-                             end_date = datetime.datetime(2026, 6, 10),
+model_data = build_dataframe(data, rho = -0.001, 
+                             end_date = datetime.datetime(2026, 6, 11),
                              friendly_weight=1
                              )
 poisson_model = estimate_model(model_data)

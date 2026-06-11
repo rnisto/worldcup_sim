@@ -5,6 +5,7 @@ import groups
 import functions
 import time
 from statsmodels.iolib.smpickle import load_pickle
+import gc
 
 poisson_model = load_pickle("poisson_model.pkl")
 
@@ -21,7 +22,7 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
     ["home_team", "away_team", "advantage"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
-n_runs = 50000
+n_runs = 100000
 fixtures_list = []
 winners_list = []
 total_time = 0
@@ -36,6 +37,7 @@ for i in range(n_runs):
     fixtures_list.append(fixtures)
     time_end = time.perf_counter()
     if i % 10 == 0: functions.print_time_remaining(time_start, time_end, n_runs, i)
+    if i % 100 == 0: gc.collect()
     
 fixtures = pd.concat(fixtures_list, ignore_index=True)
 winners = pd.DataFrame({
@@ -43,5 +45,5 @@ winners = pd.DataFrame({
     "model_run": range(n_runs)
 })
 
-fixtures.to_parquet("simulation_fixtures.parquet")
-winners.to_parquet("simulation_winners.parquet")
+#fixtures.to_parquet("simulation_fixtures.parquet")
+#winners.to_parquet("simulation_winners.parquet")
