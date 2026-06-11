@@ -4,26 +4,21 @@ import datetime as datetime
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
-
-def build_dataframe(rho):
-    raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
-    data = raw
-    data["date"] = pd.to_datetime(raw["date"], format='%Y-%m-%d')
-
-    data["days_since"] = (datetime.datetime.today() - data["date"]).dt.days
+def build_dataframe(data, rho, end_date, filter = True, friendly_weight = 0.5):
+    data["days_since"] = (end_date - data["date"]).dt.days
     data["time_weight"] = np.exp(data["days_since"] * rho)
-    lookback_period = datetime.timedelta(days = 365 * 5)
     data = data[(data["days_since"] < 365*5) & (data["days_since"] > 0)]
     data["comp_weight"] = np.where(
         data["tournament"] == "Friendly",
-        0.5,
+        friendly_weight,
         1.0
     )
     data["weight"] = data["comp_weight"] * data["time_weight"]
 
     # filtering teams with limited games
-    data = data.groupby('home_team').filter(lambda x: len(x) >= 10)
-    data = data.groupby('away_team').filter(lambda x: len(x) >= 10)
+    if filter == True:
+        data = data.groupby('home_team').filter(lambda x: len(x) >= 10)
+        data = data.groupby('away_team').filter(lambda x: len(x) >= 10)
 
     goal_model_data = data[["home_team", "away_team", "home_score", 
                             "neutral", "weight"]]
@@ -46,10 +41,16 @@ def estimate_model(data):
                             ).fit()
     return poisson_model
 
-data = build_dataframe(rho = -0.0018)
-poisson_model = estimate_model(data)
+data = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
+data["date"] = pd.to_datetime(data["date"], format='%Y-%m-%d')
 
-# poisson_model.save("poisson_model.pkl")
+model_data = build_dataframe(data, rho = -0.0015, 
+                             end_date = datetime.datetime(2026, 6, 10),
+                             friendly_weight=1
+                             )
+poisson_model = estimate_model(model_data)
+
+poisson_model.save("poisson_model.pkl")
 
 # coeffs = poisson_model.params.to_frame(name="coef").reset_index()
 # coeffs.columns = ["team", "value"]
