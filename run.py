@@ -21,7 +21,7 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
     ["home_team", "away_team", "advantage"]
 )[["home_goals", "away_goals"]].to_dict("index")
 
-n_runs = 10000
+n_runs = 50000
 fixtures_list = []
 winners_list = []
 total_time = 0
@@ -43,5 +43,5 @@ winners = pd.DataFrame({
     "model_run": range(n_runs)
 })
 
-#fixtures.to_parquet("simulation_fixtures.parquet")
-#winners.to_parquet("simulation_winners.parquet")
+fixtures.to_parquet("simulation_fixtures.parquet")
+winners.to_parquet("simulation_winners.parquet")

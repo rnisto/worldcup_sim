@@ -52,9 +52,3 @@ poisson_model = estimate_model(model_data)
 
 poisson_model.save("poisson_model.pkl")
 
-# coeffs = poisson_model.params.to_frame(name="coef").reset_index()
-# coeffs.columns = ["team", "value"]
-# coeffs = coeffs[~coeffs["team"].isin(["Intercept", "home"])]
-
-# attack = coeffs[coeffs["team"].str.contains("team")]
-# defence = coeffs[coeffs["team"].str.contains("opponent")]
