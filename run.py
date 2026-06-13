@@ -23,27 +23,19 @@ predicted_goals_dict = predicted_goals_lookup.set_index(
 )[["home_goals", "away_goals"]].to_dict("index")
 
 n_runs = 100000
-fixtures_list = []
-winners_list = []
+all_results = []
 total_time = 0
 
 wc = classes.WorldCup(groups = groups.create_groups(), fixtures = fixtures)
 time_start = time.perf_counter()
 for i in range(n_runs):
-    fixtures, winner = wc.simulate(predicted_goals_dict)
+    output = wc.simulate(predicted_goals_dict)
     wc.reset()
-    fixtures["model_run"] = i
-    winners_list.append(winner)
-    fixtures_list.append(fixtures)
+    output["model_run"] = i
+    all_results.append(output)
     time_end = time.perf_counter()
     if i % 10 == 0: functions.print_time_remaining(time_start, time_end, n_runs, i)
     if i % 100 == 0: gc.collect()
     
-fixtures = pd.concat(fixtures_list, ignore_index=True)
-winners = pd.DataFrame({
-    "team": winners_list,
-    "model_run": range(n_runs)
-})
-
-#fixtures.to_parquet("simulation_fixtures.parquet")
-#winners.to_parquet("simulation_winners.parquet")
+results = pd.concat(all_results, ignore_index=True)
+results.to_parquet("simulation_results.parquet")

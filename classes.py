@@ -319,41 +319,57 @@ class WorldCup:
         return self.groups[group_name].table
     
     def all_matches(self):
-        return (
-            self.first_round.matches
-            + self.second_round.matches
-            + self.quarters.matches
-            + self.semis.matches
-            + self.final.matches
-        )
+        matches = []
 
+        for group in self.groups.values():
+            matches.extend(group.matches)
+
+        matches.extend(self.first_round.matches)
+        matches.extend(self.second_round.matches)
+        matches.extend(self.quarters.matches)
+        matches.extend(self.semis.matches)
+        matches.extend(self.final.matches)
+
+        return matches
+    
     def summarise(self):
-        fixtures = pd.DataFrame({
-            "team": self.teams
-        })
+        rows = []
 
-        rounds = [
-            ("R32", self.first_round),
-            ("R16", self.second_round),
-            ("QF", self.quarters),
-            ("SF", self.semis),
-            ("Final", self.final),
-        ]
+        for match in self.all_matches():
+            rows.append({
+                "home_team": match.home_team,
+                "away_team": match.away_team,
+                "home_goals": match.home_goals,
+                "away_goals": match.away_goals,
+                "round": match.round,
+                "winner": match.outcome,
+                "advantage": match.advantage
+            })
 
-        for stage, rnd in rounds:
-            for match in rnd.matches:
-                fixtures.loc[
-                    fixtures["team"] == match.home_team,
-                    stage                           
-                ] = match.away_team
+        results = pd.DataFrame(rows)
+        return results
+        # rounds = [
+        #     ("R32", self.first_round),
+        #     ("R16", self.second_round),
+        #     ("QF", self.quarters),
+        #     ("SF", self.semis),
+        #     ("Final", self.final),
+        # ]
+
+        # for stage, rnd in rounds:
+        #     for match in rnd.matches:
+        #         fixtures.loc[
+        #             fixtures["team"] == match.home_team,
+        #             stage                           
+        #         ] = match.away_team
         
-                fixtures.loc[
-                    fixtures["team"] == match.away_team,
-                    stage                           
-                ] = match.home_team
+        #         fixtures.loc[
+        #             fixtures["team"] == match.away_team,
+        #             stage                           
+        #         ] = match.home_team
 
-                winner = self.final.matches[0].outcome
-        return [fixtures, winner]
+        #         winner = self.final.matches[0].outcome
+        # return [fixtures, winner]
 
     def reset(self):
         for group in self.groups.values():
