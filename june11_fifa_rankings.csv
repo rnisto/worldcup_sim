@@ -1,0 +1,961 @@
+"1
+2",Argentina,"Argentina
+Iceland
+FT
+30",1.15,1877.27
+2,Spain,"Spain
+Peru
+FT
+31",1.7,1874.71
+"3
+2",France,"France
+Northern Ireland
+FT
+31",1.27,1870.7
+4,England,"England
+Costa Rica
+FT
+30",0.97,1828.02
+5,Portugal,"Portugal
+Nigeria
+FT
+21",1.67,1767.85
+6,Brazil,"Brazil
+Morocco
+FT
+11",,1765.86*
+"7
+1",Morocco,"Brazil
+Morocco
+FT
+11",,1755.10*
+"8
+1",Netherlands,"Netherlands
+Uzbekistan
+FT
+21",2.47,1753.57
+9,Belgium,"Belgium
+Tunisia
+FT
+50",2.69,1742.24
+10,Germany,"USA
+Germany
+FT
+12",4.47,1735.77
+11,Croatia,"Croatia
+Slovenia
+FT
+21",2.63,1714.87
+12,Italy,"Greece
+Italy
+FT
+01",2.96,1704.73
+13,Colombia,"Colombia
+Jordan
+FT
+20",2.36,1698.35
+"14
+1",Mexico,"Mexico
+South Africa
+FT
+20",,1687.48*
+"15
+1",Senegal,"Senegal
+Saudi Arabia
+FT
+00",-2.34,1684.07
+"16
+1",Uruguay,"Algeria
+Uruguay
+FT
+00",-1.05,1673.07
+"17
+1",USA,"USA
+Paraguay
+FT
+41",,1671.23*
+18,Japan,"Japan
+Iceland
+FT
+10",1.15,1661.58
+19,Switzerland,"Qatar
+Switzerland
+FT
+11",,1650.06*
+"20
+1",IR Iran,"Mali
+IR Iran
+FT
+02",3.54,1619.58
+"21
+1",Denmark,"Congo DR
+Denmark
+FT
+00",-1.33,1619.47
+22,Türkiye,"Australia
+Türkiye
+FT
+20",,1605.73*
+23,Ecuador,"Ecuador
+Guatemala
+FT
+30",2.03,1598.52
+24,Austria,"Austria
+Tunisia
+FT
+10",3.96,1597.4
+25,Korea Republic,"Korea Republic
+Czechia
+FT
+21",,1591.63*
+26,Nigeria,"Portugal
+Nigeria
+FT
+21",-1.67,1585.02
+27,Australia,"Australia
+Türkiye
+FT
+20",,1579.34*
+28,Algeria,"Netherlands
+Algeria
+FT
+01",6.78,1571.03
+29,Egypt,"Brazil
+Egypt
+FT
+21",-3.19,1562.37
+30,Canada,"Canada
+Bosnia and Herzegovina
+FT
+11",,1559.48*
+31,Norway,"Norway
+Morocco
+FT
+11",1.84,1557.44
+32,Ukraine,"Poland
+Ukraine
+FT
+02",2.41,1549.29
+"33
+1",Côte d'Ivoire,"France
+Côte d'Ivoire
+FT
+12",7.89,1540.87
+"34
+1",Panama,"Bosnia and Herzegovina
+Panama
+FT
+11",-1.44,1539.16
+"35
+1",Russia,"Russia
+Trinidad and Tobago
+FT
+30",2.37,1529.6
+"36
+1",Poland,"Poland
+Nigeria
+FT
+22",0.59,1526.18
+37,Wales,"Romania
+Wales
+FT
+21",-5.69,1516.95
+38,Sweden,"Sweden
+Greece
+FT
+22",-0.33,1509.79
+"39
+3",Hungary,"Hungary
+Kazakhstan
+FT
+31",2.26,1506.39
+"40
+1",Czechia,"Korea Republic
+Czechia
+FT
+21",,1505.74*
+"41
+1",Paraguay,"USA
+Paraguay
+FT
+41",,1505.35*
+"42
+1",Scotland,"Haiti
+Scotland
+FT
+01",,1503.34*
+"43
+4",Serbia,"Mexico
+Serbia
+FT
+51",-3.35,1502.13
+"44
+1",Cameroon,"Cameroon
+China PR
+FT
+20",2.98,1481.24
+"45
+1",Tunisia,"Belgium
+Tunisia
+FT
+50",-2.69,1476.41
+46,Congo DR,"Congo DR
+Chile
+FT
+12",-5.26,1474.43
+"47
+1",Slovakia,"Slovakia
+Montenegro
+FT
+22",-1.62,1473.66
+"48
+1",Greece,"Greece
+Italy
+FT
+01",-2.96,1473.19
+49,Venezuela,"Venezuela
+Iraq
+FT
+20",4.87,1469.18
+50,Uzbekistan,"Netherlands
+Uzbekistan
+FT
+21",-2.47,1458.73
+"51
+3",Chile,"Congo DR
+Chile
+FT
+12",5.26,1458.2
+"52
+1",Peru,"Spain
+Peru
+FT
+31",-1.7,1457.69
+"53
+2",Costa Rica,"England
+Costa Rica
+FT
+30",-0.97,1456.03
+"54
+2",Romania,"Romania
+Wales
+FT
+21",5.69,1455.89
+"55
+3",Mali,"Mali
+IR Iran
+FT
+02",-3.54,1455.59
+"56
+1",Qatar,"Qatar
+Switzerland
+FT
+11",,1450.31*
+57,Iraq,"Venezuela
+Iraq
+FT
+20",-4.87,1446.28
+"58
+1",Republic of Ireland,"Canada
+Republic of Ireland
+FT
+11",1.14,1441.1
+"59
+1",Slovenia,"Croatia
+Slovenia
+FT
+21",-2.63,1441.09
+60,South Africa,"Mexico
+South Africa
+FT
+20",,1428.38*
+61,Saudi Arabia,"Senegal
+Saudi Arabia
+FT
+00",2.34,1423.88
+62,Burkina Faso,"Belarus
+Burkina Faso
+FT
+22",-1.55,1406.99
+63,Jordan,"Colombia
+Jordan
+FT
+20",-2.36,1387.74
+"64
+1",Bosnia and Herzegovina,"Canada
+Bosnia and Herzegovina
+FT
+11",,1387.22*
+"65
+1",Honduras,"Argentina
+Honduras
+FT
+20",-1.3,1378.97
+"66
+2",Albania,"Albania
+Luxembourg
+FT
+01",-6.45,1376.03
+"67
+2",Cabo Verde,"Bermuda
+Cabo Verde
+FT
+03",1.82,1371.11
+68,United Arab Emirates,"Saudi Arabia
+United Arab Emirates
+Abandoned
+00",0.28,1370.47
+"69
+2",North Macedonia,"Türkiye
+North Macedonia
+FT
+40",-2.95,1369.16
+70,Northern Ireland,"France
+Northern Ireland
+FT
+31",-1.27,1365.3
+71,Jamaica,"Nigeria
+Jamaica
+FT
+30",-1.48,1357.84
+72,Georgia,"Georgia
+Bahrain
+FT
+20",4.12,1355.26
+"73
+1",Ghana,"Wales
+Ghana
+FT
+11",1.65,1346.88
+"74
+1",Iceland,"Argentina
+Iceland
+FT
+30",-1.15,1342.77
+"75
+2",Finland,"Hungary
+Finland
+FT
+21",-3.55,1341.92
+"76
+1",Israel,"Albania
+Israel
+FT
+01",5.57,1333.9
+"77
+1",Bolivia,"Bolivia
+Scotland
+FT
+04",-3.42,1326
+78,Kosovo,"Kosovo
+Andorra
+FT
+30",1.95,1319.12
+79,Oman,"Indonesia
+Oman
+FT
+30",-6.56,1306.9
+"80
+1",Montenegro,"Slovakia
+Montenegro
+FT
+22",1.62,1301.98
+"81
+1",Guinea,"Northern Ireland
+Guinea
+FT
+10",-4.41,1295.6
+82,Curaçao,"Curaçao
+Aruba
+FT
+40",1.69,1294.77
+83,Haiti,"Haiti
+Scotland
+FT
+01",,1293.10*
+84,Syria,"Belarus
+Syria
+FT
+41",-5.5,1283.05
+85,New Zealand,"England
+New Zealand
+FT
+10",-1.08,1275.58
+"86
+1",Gabon,"Trinidad and Tobago
+Gabon
+FT
+22",-0.48,1272.51
+"87
+1",Bulgaria,"Moldova
+Bulgaria
+FT
+22",-2.38,1271.68
+"88
+1",Angola,"Angola
+Central African Republic
+FT
+30",3.36,1265.58
+"89
+1",Uganda,"Uganda
+Nigeria
+FT
+13",-9.59,1264.09
+"90
+2",Zambia,"Argentina
+Zambia
+FT
+50",-0.86,1255.82
+"91
+3",China PR,"China PR
+Thailand
+FT
+00",-0.04,1254.81
+"92
+1",Bahrain,"Georgia
+Bahrain
+FT
+20",-4.12,1254.41
+"93
+3",Benin,"Benin
+Togo
+FT
+15",-6.05,1252.17
+"94
+1",Thailand,"China PR
+Thailand
+FT
+00",0.04,1250.8
+95,Palestine,"Kyrgyz Republic
+Palestine
+FT
+00",-0.5,1243.71
+"96
+1",Belarus,"Belarus
+Burkina Faso
+FT
+22",1.55,1242.88
+"97
+1",Guatemala,"Ecuador
+Guatemala
+FT
+30",-2.03,1238.74
+98,Luxembourg,"Albania
+Luxembourg
+FT
+01",6.45,1232.82
+99,Vietnam,"Vietnam
+Malaysia
+FT
+31",9.67,1225.68
+100,El Salvador,"El Salvador
+Qatar
+FT
+00",2.07,1225.34
+"101
+2",Tajikistan,"Tajikistan
+India
+FT
+11",-1.33,1224.19
+102,Trinidad and Tobago,"Russia
+Trinidad and Tobago
+FT
+30",-2.37,1219.59
+"103
+2",Mozambique,"Indonesia
+Mozambique
+FT
+10",-5.69,1218.62
+104,Madagascar,"Morocco
+Madagascar
+FT
+40",-1.07,1202.69
+105,Equatorial Guinea,"Equatorial Guinea
+Madagascar
+FT
+11",0.08,1195.2
+"106
+1",Kyrgyz Republic,"Kyrgyz Republic
+Palestine
+FT
+00",0.5,1192.16
+"107
+1",Armenia,"Armenia
+Moldova
+FT
+11",-1.7,1189.63
+"108
+1",Comoros,"Kazakhstan
+Comoros
+FT
+10",-5.15,1187.91
+"109
+2",Kenya,"Lesotho
+Kenya
+FT
+04",3.93,1185.08
+"110
+2",Libya,"Liberia
+Libya
+FT
+22",-0.99,1182.08
+"111
+1",Kazakhstan,"Hungary
+Kazakhstan
+FT
+31",-2.26,1180.78
+"112
+1",Tanzania,"Macau
+Tanzania
+FT
+06",2.28,1180.27
+"113
+2",Mauritania,"Niger
+Mauritania
+FT
+01",5.08,1176.68
+114,Niger,"Niger
+Mauritania
+FT
+01",-5.08,1175.33
+"115
+7",Lebanon,"Lebanon
+Yemen
+FT
+02",-15.75,1172.22
+116,The Gambia,"IR Iran
+The Gambia
+FT
+31",-0.74,1159.64
+117,Sudan,"Senegal
+Sudan
+FT
+31",0,1157.22
+"118
+4",Indonesia,"Indonesia
+Mozambique
+FT
+10",5.69,1157.14
+"119
+2",Togo,"Benin
+Togo
+FT
+15",6.05,1152.76
+"120
+2",DPR Korea,"IR Iran
+Korea DPR
+FT
+30",-3.58,1151.05
+"121
+1",Namibia,"Namibia
+Comoros
+FT
+00",0.43,1148.84
+"122
+3",Sierra Leone,"Liberia
+Sierra Leone
+FT
+31",-5.75,1147.56
+123,Faroe Islands,"Latvia
+Faroe Islands
+FT
+01",4.6,1136.59
+"124
+2",Cyprus,"Liechtenstein
+Cyprus
+FT
+02",2.19,1133.25
+125,Suriname,"Bolivia
+Suriname
+FT
+21",-8.11,1132.43
+"126
+2",Azerbaijan,"Azerbaijan
+San Marino
+FT
+21",1.73,1132
+"127
+2",Estonia,"Estonia
+Lithuania
+FT
+10",4.38,1130.64
+128,Rwanda,"Rwanda
+Estonia
+FT
+20",5.04,1126.62
+"129
+2",Malawi,"Ethiopia
+Malawi
+FT
+11",-0.43,1122.05
+130,Zimbabwe,"Zimbabwe
+India
+FT
+10",2.37,1119.78
+131,Nicaragua,"Paraguay
+Nicaragua
+FT
+40",-1.85,1114.63
+132,Guinea-Bissau,"Burkina Faso
+Guinea-Bissau
+FT
+11",2.66,1108.38
+"133
+1",Kuwait,"Thailand
+Kuwait
+FT
+22",1.37,1106.47
+"134
+1",Congo,"Morocco
+Congo
+FT
+10",-2.28,1105.96
+135,Philippines,"Philippines
+Myanmar
+FT
+51",4.22,1100.95
+"136
+2",Malaysia,"Vietnam
+Malaysia
+FT
+31",-9.67,1086.22
+137,Latvia,"Latvia
+Faroe Islands
+FT
+01",-4.6,1085.66
+"138
+2",India,"Tajikistan
+India
+FT
+11",1.33,1084.93
+139,Central African Republic,"Angola
+Central African Republic
+FT
+30",-3.36,1080.82
+140,Liberia,"Liberia
+Sierra Leone
+FT
+31",5.75,1080.44
+141,Turkmenistan,"Thailand
+Turkmenistan
+FT
+21",-8.87,1078.65
+142,Burundi,"Burundi
+Chad
+FT
+40",8.7,1078.01
+"143
+1",Ethiopia,"Ethiopia
+Malawi
+FT
+11",0.43,1077.52
+"144
+1",Dominican Republic,"Panama
+Dominican Republic
+FT
+42",-1.46,1076.5
+"145
+4",Yemen,"Lebanon
+Yemen
+FT
+02",15.75,1065.24
+"146
+1",Lesotho,"Lesotho
+Kenya
+FT
+04",-3.93,1064.29
+"147
+1",Botswana,"Malawi
+Botswana
+FT
+01",5.72,1063.63
+"148
+1",Singapore,"Singapore
+China PR
+FT
+12",-3.25,1057.95
+"149
+1",Lithuania,"Estonia
+Lithuania
+FT
+10",-4.38,1056.85
+150,Guyana,"Guyana
+Belize
+FT
+31",3.73,1049.32
+151,New Caledonia,"New Caledonia
+Jamaica
+FT
+01",-5.67,1036.95
+152,St. Kitts and Nevis,"St. Kitts and Nevis
+Solomon Islands
+FT
+42",5.05,1036.33
+153,Solomon Islands,"St. Kitts and Nevis
+Solomon Islands
+FT
+42",-5.05,1031.89
+"154
+2",Puerto Rico,"Puerto Rico
+Saudi Arabia
+FT
+03",-1.81,1024.3
+"155
+1",Fiji,"Vanuatu
+Fiji
+FT
+22",-0.21,1024.17
+"156
+1",Hong Kong,"Cambodia
+Hong Kong
+FT
+20",-6.08,1024.16
+157,Tahiti,"New Caledonia
+Tahiti
+FT
+30",-12.43,1019.04
+158,Myanmar,"Philippines
+Myanmar
+FT
+51",-4.22,1010.91
+159,Moldova,"Armenia
+Moldova
+FT
+11",1.7,1008.24
+160,Vanuatu,"Vanuatu
+Fiji
+FT
+22",0.21,1002.53
+161,Malta,"Azerbaijan
+Malta
+FT
+02",6.4,992.79
+162,Antigua and Barbuda,"Antigua and Barbuda
+Guyana
+FT
+14",-4.56,986.58
+163,Grenada,"Republic of Ireland
+Grenada
+FT
+50",-0.74,981.82
+164,Cuba,"Dominican Republic
+Cuba
+FT
+11",0.93,981.42
+165,Eswatini,"Eswatini
+Eritrea
+FT
+12",-15.39,979.01
+"166
+1",St. Lucia,"Azerbaijan
+St. Lucia
+FT
+61",-3.58,976.71
+"167
+1",Bermuda,"Bermuda
+Cabo Verde
+FT
+03",-1.82,975.05
+168,Papua New Guinea,"Papua New Guinea
+Solomon Islands
+FT
+10",5.73,974.9
+"169
+1",South Sudan,"South Sudan
+Djibouti
+FT
+01",-15.99,970.94
+"170
+1",St. Vincent / Grenadines,"Barbados
+St. Vincent / Grenadines
+FT
+23",4.53,968.27
+"171
+2",Afghanistan,"Pakistan
+Afghanistan
+FT
+20",-3.13,968.07
+"172
+1",Andorra,"Kosovo
+Andorra
+FT
+30",-1.95,946.43
+"173
+1",Maldives,"Maldives
+Pakistan
+FT
+03",-6.18,943.92
+174,Chinese Taipei,"Chinese Taipei
+Sri Lanka
+FT
+13",-14.42,923.78
+"175
+2",Cambodia,"Cambodia
+Hong Kong
+FT
+20",6.08,922.32
+"176
+1",Montserrat,"Guyana
+Montserrat
+FT
+30",-10.12,916.75
+"177
+1",Nepal,"Nepal
+Laos
+FT
+01",-13.87,914.54
+178,Mauritius,"Mauritius
+Somalia
+FT
+(2)0(4)0",-1.96,911.49
+179,Barbados,"Barbados
+St. Vincent / Grenadines
+FT
+23",-4.53,909.89
+180,Belize,"Guyana
+Belize
+FT
+31",-3.73,907
+181,Bangladesh,"San Marino
+Bangladesh
+FT
+12",3.4,902.93
+182,Dominica,"Guyana
+Dominica
+FT
+20",-3.68,897.69
+183,Chad,"Burundi
+Chad
+FT
+40",-8.7,896.85
+184,Eritrea,"Eswatini
+Eritrea
+FT
+12",15.39,887.06
+185,Laos,"Nepal
+Laos
+FT
+01",13.87,885.03
+"186
+2",Cook Islands,"Cook Islands
+American Samoa
+FT
+12",-5.05,877.53
+"187
+4",Sri Lanka,"Sri Lanka
+Bhutan
+FT
+41",5.04,876.86
+"188
+2",Samoa,"Samoa
+New Zealand
+FT
+08",-4.66,876.41
+189,Aruba,"Curaçao
+Aruba
+FT
+40",-1.69,875.61
+"190
+3",Mongolia,"Hong Kong
+Mongolia
+FT
+20",-3.61,874.47
+"191
+1",American Samoa,"American Samoa
+Guam
+FT
+06",-5.55,871.61
+"192
+6",Bhutan,"Sri Lanka
+Bhutan
+FT
+41",-5.04,870.81
+"193
+1",Macau,"Macau
+Tanzania
+FT
+06",-2.28,858.03
+"194
+1",Brunei,"Timor-Leste
+Brunei
+FT
+31",-5.36,857.73
+"195
+1",São Tomé and Príncipe,"Ethiopia
+São Tomé and Príncipe
+FT
+10",-7.92,855.44
+"196
+1",Djibouti,"South Sudan
+Djibouti
+FT
+01",15.99,853.58
+"197
+2",Cayman Islands,"Gibraltar
+Cayman Islands
+FT
+41",-5.39,850.06
+"198
+4",Pakistan,"Pakistan
+Afghanistan
+FT
+20",3.13,840.28
+"199
+1",Somalia,"Mauritius
+Somalia
+FT
+(2)0(4)0",8.21,839.17
+"200
+1",Tonga,"Tonga
+Samoa
+FT
+12",-11.49,835.64
+"201
+1",Timor-Leste,"Timor-Leste
+Brunei
+FT
+31",5.36,831
+"202
+1",Gibraltar,"Gibraltar
+Cayman Islands
+FT
+41",5.39,820.26
+"203
+2",Guam,"Myanmar
+Guam
+FT
+61",-3.26,819.54
+204,Seychelles,"Lesotho
+Seychelles
+FT
+21",-6.94,804.16
+205,Turks and Caicos Islands,"Belize
+Turks and Caicos Islands
+FT
+30",-5.95,803.98
+206,Liechtenstein,"Liechtenstein
+Cyprus
+FT
+02",-2.19,797.7
+207,Bahamas,"Cayman Islands
+Bahamas
+FT
+10",-4.43,786.82
+"208
+1",US Virgin Islands,"US Virgin Islands
+Puerto Rico
+FT
+02",-2.84,779.76
+"209
+1",British Virgin Islands,"Gibraltar
+British Virgin Islands
+FT
+40",-4.73,777.41
+210,Anguilla,"British Virgin Islands
+Anguilla
+FT
+40",-4.88,760.25
+211,San Marino,"Azerbaijan
+San Marino
+FT
+21",-1.73,721.2
