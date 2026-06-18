@@ -18,7 +18,8 @@ results["Outcome"] = pd.Categorical(
     "Quarter Finals", "Semi Finals", "Final", "Winners"
     ])
 
-st.title("World Cup Simulations")
+st.title("2026 Fifa World Cup Projections")
+st.text("This apps presents the results of Monte Carlo Simulations of the 2026 World Cup. Teams strengths have been modelled using a simple poisson goals model.")
 
 st.header("The Candidates")
 st.text("Probability of winning the tournanment")
@@ -93,6 +94,7 @@ knockouts = (
 st.dataframe(knockouts, hide_index=True)
 
 st.subheader("Road to the Final")
+st.text("These outputs aren't path dependent and so should be treated with some caution, particularly for weaker teams.")
 rtf = pd.read_parquet("rtf.parquet")
 rtf = rtf[rtf["round"] != "Group Stage"]
 rtf["round"] = pd.Categorical(
