@@ -41,5 +41,5 @@ for i in range(n_runs):
     
 results = pd.concat(all_results, ignore_index=True)
 
-sim_name = f'{datetime.date.today().strftime('%y%m%d')}_simulation.parquet'
+sim_name = f'{datetime.date.today().strftime('%y%m%d')}_simulations.parquet'
 results.to_parquet(sim_name)

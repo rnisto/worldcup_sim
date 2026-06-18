@@ -159,7 +159,6 @@ def get_thirdq_prob(df):
     p_stage["3"] = (
         p_stage["3"] - p_stage["3Q"]
     )
-    print(p_stage.head(20))
     out = p_stage.melt(id_vars = "team",
                        value_vars = ["Round of 32", "Round of 16",
                                      "Quarter Finals", "Semi Finals",
@@ -197,28 +196,38 @@ def get_probabilities(df):
     standings = get_group_standings(df)
     prob_list.append(get_group_prob(standings))
     df = pd.concat(prob_list, ignore_index=True)
-    print(df.sample(20))
     out = get_thirdq_prob(df)
 
     #check_probabilities(out)
 
     return out
+
+dates = [datetime.datetime(2026,6,10), datetime.datetime(2026,6,18)]
+
+strengths_list = []
+probabilities_list = []
+
+for d in dates:
+    model_name = f'{d.strftime('%y%m%d')}_model.pkl'
+    poisson_model = load_pickle(model_name)
+    strengths = get_team_strengths(poisson_model)
+    rankings = get_fifa_rankings("./june11_fifa_rankings.csv")
+
+    output = strengths.merge(rankings, on="team", how="inner")
+    output["date"] = d
+    strengths_list.append(output)
     
-model_name = f'{datetime.date.today().strftime('%y%m%d')}_model.pkl'
-poisson_model = load_pickle(model_name)
-strengths = get_team_strengths(poisson_model)
-rankings = get_fifa_rankings("./june11_fifa_rankings.csv")
+    print("Pearson :", output["rating"].corr(output["elo"], method="pearson"))
+    print("Spearman:", output["rating"].corr(output["elo"], method="spearman"))
 
-output = strengths.merge(rankings, on="team", how="inner")
-print("Pearson :", output["rating"].corr(output["elo"], method="pearson"))
-print("Spearman:", output["rating"].corr(output["elo"], method="spearman"))
+    sim_name = f'{d.strftime('%y%m%d')}_simulations.parquet'
+    simulation_results = pd.read_parquet(sim_name)
+    probabilities = get_probabilities(simulation_results)
+    probabilities["date"] = d
+    probabilities_list.append(probabilities)
 
+strengths = pd.concat(strengths_list)
+strengths.to_parquet("strengths.parquet")
 
-sim_name = f'{datetime.date.today().strftime('%y%m%d')}_simulation.parquet'
-simulation_results = pd.read_parquet(sim_name)
-probabilities = get_probabilities(simulation_results)
-
-print(probabilities[probabilities["team"] == "Germany"])
-print(probabilities[probabilities["outcome"] == "Winners"].sort_values("probability", ascending = False))
-
+probabilities = pd.concat(probabilities_list)
 probabilities.to_parquet("probabilities.parquet")
