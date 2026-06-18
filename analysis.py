@@ -3,6 +3,7 @@ import numpy as np
 from statsmodels.iolib.smpickle import load_pickle
 import groups
 import datetime
+from itertools import combinations
 
 def get_team_strengths(model):
     # calculating team strengths
@@ -202,6 +203,35 @@ def get_probabilities(df):
 
     return out
 
+def get_road_to_final(df):
+    matches = df.copy()
+
+    matches = pd.concat([
+        matches.rename(columns={
+            "home_team": "team",
+            "away_team": "opponent"
+        })[["model_run", "round", "team", "opponent"]],
+
+        matches.rename(columns={
+            "away_team": "team",
+            "home_team": "opponent"
+        })[["model_run", "round", "team", "opponent"]]
+    ])
+
+    road = (
+        matches
+        .groupby(["team", "round", "opponent"])
+        .size()
+        .reset_index(name="count")
+    )
+
+    road["probability"] = (
+        road["count"] /
+        road.groupby(["team", "round"])["count"].transform("sum")
+    )
+
+    return road
+
 dates = [datetime.datetime(2026,6,10), datetime.datetime(2026,6,18)]
 
 strengths_list = []
@@ -231,3 +261,6 @@ strengths.to_parquet("strengths.parquet")
 
 probabilities = pd.concat(probabilities_list)
 probabilities.to_parquet("probabilities.parquet")
+
+rtf = get_road_to_final(pd.read_parquet("260618_simulations.parquet"))
+rtf.to_parquet("rtf.parquet")
