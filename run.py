@@ -6,8 +6,10 @@ import functions
 import time
 from statsmodels.iolib.smpickle import load_pickle
 import gc
+import datetime as datetime
 
-poisson_model = load_pickle("poisson_model.pkl")
+model_name = f'{datetime.date.today().strftime('%y%m%d')}_model.pkl'
+poisson_model = load_pickle(model_name)
 
 raw = pd.read_csv("https://raw.githubusercontent.com/martj42/international_results/refs/heads/master/results.csv", on_bad_lines='warn')
 raw["date"] = pd.to_datetime(raw["date"], format='%Y-%m-%d')
@@ -38,4 +40,6 @@ for i in range(n_runs):
     if i % 100 == 0: gc.collect()
     
 results = pd.concat(all_results, ignore_index=True)
-results.to_parquet("simulation_results.parquet")
+
+sim_name = f'{datetime.date.today().strftime('%y%m%d')}_simulation.parquet'
+results.to_parquet(sim_name)

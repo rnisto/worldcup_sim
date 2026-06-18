@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import knockout
-import time
+import datetime
 
 class Team:
     """An object to store information on international teams"""
@@ -12,14 +12,14 @@ class Team:
 
 class Match:
     """An object to store information about games"""
-    def __init__(self, home_team, away_team, location = None, round = None):
+    def __init__(self, home_team, away_team, location = None, round = None, home_goals = None, away_goals = None):
         self.home_team = home_team
         self.away_team = away_team
         self.location = location
         self.round = round
 
-        self.home_goals = None
-        self.away_goals = None
+        self.home_goals = home_goals
+        self.away_goals = away_goals
 
         if self.home_team == self.location:
             self.advantage = "H"
@@ -35,9 +35,11 @@ class Match:
         return home_avg, away_avg
 
     def simulate_result(self, goals_lookup):
-        home_avg, away_avg = self.predicted_goals(goals_lookup)
-        self.home_goals = np.random.poisson(home_avg)
-        self.away_goals = np.random.poisson(away_avg)
+        if ((self.home_goals == None) & (self.away_goals == None)):
+            home_avg, away_avg = self.predicted_goals(goals_lookup)
+            self.home_goals = np.random.poisson(home_avg)
+            self.away_goals = np.random.poisson(away_avg)
+
         if self.home_goals > self.away_goals:
             self.outcome = self.home_team
         elif self.home_goals < self.away_goals:
@@ -49,6 +51,16 @@ class Match:
     
     def simulate_shootout(self):
         self.outcome = np.random.choice([self.home_team, self.away_team])
+
+    def copy(self):
+        return Match(
+            home_team=self.home_team,
+            away_team=self.away_team,
+            location=self.location,
+            home_goals=self.home_goals,
+            away_goals=self.away_goals,
+            round = self.round
+        )
 
 class Group:
     """A class to store group matches and results"""
@@ -67,12 +79,18 @@ class Group:
         self.l = np.zeros(len(self.teams))
         self.table = self.build_table()
 
-    def add_match(self, home, away, location):
+    def add_match(self, home, away, location, home_goals, away_goals):
+        if pd.isna(home_goals): 
+            home_goals = None
+            away_goals = None
+
         self.matches.append(
             Match(
                 home_team=home,
                 away_team=away,
                 location = location,
+                home_goals = home_goals,
+                away_goals = away_goals,
                 round = "Group Stage"
             )
         )
@@ -80,16 +98,24 @@ class Group:
     def import_fixtures(self, fixtures):
 
         group_fixtures = fixtures[
-            fixtures["home_team"].isin(self.teams) &
-            fixtures["away_team"].isin(self.teams)
+            (fixtures["home_team"].isin(self.teams)) &
+            (fixtures["away_team"].isin(self.teams)) &
+            (fixtures["date"] < datetime.datetime(2026,6,28))
         ]
 
         for _, row in group_fixtures.iterrows():
             self.add_match(
                 home=row["home_team"],
                 away=row["away_team"],
-                location=row["country"]
+                location=row["country"],
+                home_goals = row["home_score"],
+                away_goals = row["away_score"]
             )
+
+        self.save_fixtures()
+
+    def save_fixtures(self):
+        self.fixtures = [m.copy() for m in self.matches]
 
     def update_table(self, home, away, hg, ag):
         h = self.team_to_idx[home]
@@ -132,7 +158,6 @@ class Group:
             ascending=False
         )
         df = df.set_index("team")
-        
         return df
 
     def simulate(self, goals_lookup):
@@ -154,10 +179,7 @@ class Group:
                   "-" + str(match.away_goals) + " "  + match.away_team)
             
     def reset(self):
-        for match in self.matches:
-            match.home_goals = None
-            match.away_goals = None
-            match.result = None
+        self.matches = [m.copy() for m in self.fixtures]
 
         self.pts = np.zeros(len(self.teams))
         self.gf = np.zeros(len(self.teams))

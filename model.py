@@ -45,10 +45,11 @@ data = pd.read_csv("https://raw.githubusercontent.com/martj42/international_resu
 data["date"] = pd.to_datetime(data["date"], format='%Y-%m-%d')
 
 model_data = build_dataframe(data, rho = -0.001, 
-                             end_date = datetime.datetime(2026, 6, 11),
+                             end_date = datetime.datetime.today(),
                              friendly_weight=1
                              )
 poisson_model = estimate_model(model_data)
 
-poisson_model.save("poisson_model.pkl")
+name = f'{datetime.date.today().strftime('%y%m%d')}_model.pkl'
+poisson_model.save(name)
 

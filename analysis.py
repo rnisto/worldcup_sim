@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from statsmodels.iolib.smpickle import load_pickle
 import groups
+import datetime
 
 def get_team_strengths(model):
     # calculating team strengths
@@ -203,8 +204,8 @@ def get_probabilities(df):
 
     return out
     
-
-poisson_model = load_pickle("poisson_model.pkl")
+model_name = f'{datetime.date.today().strftime('%y%m%d')}_model.pkl'
+poisson_model = load_pickle(model_name)
 strengths = get_team_strengths(poisson_model)
 rankings = get_fifa_rankings("./june11_fifa_rankings.csv")
 
@@ -212,8 +213,12 @@ output = strengths.merge(rankings, on="team", how="inner")
 print("Pearson :", output["rating"].corr(output["elo"], method="pearson"))
 print("Spearman:", output["rating"].corr(output["elo"], method="spearman"))
 
-simulation_results = pd.read_parquet('simulation_results.parquet')
+
+sim_name = f'{datetime.date.today().strftime('%y%m%d')}_simulation.parquet'
+simulation_results = pd.read_parquet(sim_name)
 probabilities = get_probabilities(simulation_results)
 
-print(probabilities[probabilities["team"] == "Argentina"])
+print(probabilities[probabilities["team"] == "Germany"])
 print(probabilities[probabilities["outcome"] == "Winners"].sort_values("probability", ascending = False))
+
+probabilities.to_parquet("probabilities.parquet")
